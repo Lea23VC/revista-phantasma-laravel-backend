@@ -1,5 +1,8 @@
 <?php
 
+use LaraZeus\Sky\Editors\RichEditor;
+use LaraZeus\Sky\Editors\ContentEditor;
+
 return [
     /**
      * set the default path for the blog homepage.
