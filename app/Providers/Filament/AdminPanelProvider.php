@@ -58,9 +58,10 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
+                SkyPlugin::make()->uploadDirectory('XD'),
                 SpatieLaravelTranslatablePlugin::make()->defaultLocales([config('app.locale')]),
                 FilamentNavigation::make(),
-                SkyPlugin::make(),
+
             ]);
     }
 }
