@@ -62,6 +62,6 @@ class AdminPanelProvider extends PanelProvider
                 SpatieLaravelTranslatablePlugin::make()->defaultLocales([config('app.locale')]),
                 FilamentNavigation::make(),
 
-            ]);
+            ])->viteTheme('resources/css/filament/admin/theme.css');
     }
 }

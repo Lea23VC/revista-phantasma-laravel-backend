@@ -1,7 +1,7 @@
 <?php
 
-use LaraZeus\Sky\Editors\RichEditor;
 use LaraZeus\Sky\Editors\ContentEditor;
+use App\Editors\RichEditor;
 
 return [
     /**
@@ -57,5 +57,5 @@ return [
      * \LaraZeus\Sky\Editors\MarkdownEditor::class,
      * \LaraZeus\Sky\Editors\RichEditor::class,
      */
-    'editor' => \LaraZeus\Sky\Editors\RichEditor::class,
+    'editor' => RichEditor::class,
 ];
