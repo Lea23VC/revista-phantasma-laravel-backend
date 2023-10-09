@@ -17,6 +17,8 @@ class RichEditor implements ContentEditor
                 ->fileAttachmentsDisk('s3')
                 ->fileAttachmentsVisibility('public')
                 ->fileAttachmentsDirectory('uploads')
+                ->toolbarSticky(true)
+                ->showMenuBar()->language('es')
                 ->required();
         }
 
