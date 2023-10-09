@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PostResource\Pages;
 use App\Filament\Resources\PostResource\RelationManagers;
+use App\Models\Category;
 use App\Models\Post;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
@@ -19,6 +20,8 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Resources\Forms\Components;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\SpatieTagsInput;
@@ -38,7 +41,11 @@ class PostResource extends Resource
                 Forms\Components\TextInput::make('title')->required(),
                 TinyEditor::make('content')->columnSpan('full')->required(),
                 SpatieMediaLibraryFileUpload::make('featuredImage')->label('Featured image')->disk('s3')->visibility('public'),
-                SpatieTagsInput::make('Catogories')->label('Categories')->type('categories')->required(),
+                Select::make('categories')->searchable()
+                    ->options(function () {
+                        return Category::pluck('name', 'id');
+                    })->multiple(true)->relationship('categories', 'name')->required(),
+
 
             ]);
     }
