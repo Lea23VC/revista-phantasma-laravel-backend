@@ -32,10 +32,10 @@ class PostResource extends Resource
         return $form
             ->schema([
                 //
-                TinyEditor::make('content')->required(),
                 Forms\Components\TextInput::make('title')->required(),
+                TinyEditor::make('content')->columnSpan('full')->required(),
                 Forms\Components\Section::make()->columns(2)->relationship('featuredImage')->schema([
-                    FileUpload::make('key')->disk('s3')->visibility('public'),
+                    FileUpload::make('key')->label('Featured image')->disk('s3')->visibility('public'),
 
                 ])
 
