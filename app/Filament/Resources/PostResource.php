@@ -20,6 +20,9 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Resources\Forms\Components;
 use Filament\Forms\Components\FileUpload;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\SpatieTagsInput;
+use Filament\Forms\Components\Select;
 
 class PostResource extends Resource
 {
@@ -34,10 +37,8 @@ class PostResource extends Resource
                 //
                 Forms\Components\TextInput::make('title')->required(),
                 TinyEditor::make('content')->columnSpan('full')->required(),
-                Forms\Components\Section::make()->columns(2)->relationship('featuredImage')->schema([
-                    FileUpload::make('key')->label('Featured image')->disk('s3')->visibility('public'),
-
-                ])
+                SpatieMediaLibraryFileUpload::make('featuredImage')->label('Featured image')->disk('s3')->visibility('public'),
+                SpatieTagsInput::make('Catogories')->label('Categories')->type('categories')->required(),
 
             ]);
     }

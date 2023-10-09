@@ -18,6 +18,8 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use RyanChandler\FilamentNavigation\FilamentNavigation;
+use Filament\Forms\Components\Select;
+use App\Models\Post;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -54,6 +56,12 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])->plugin(FilamentNavigation::make());
+            ])->plugin(FilamentNavigation::make()->itemType('post', [
+                Select::make('post_id')
+                    ->searchable()
+                    ->options(function () {
+                        return Post::pluck('title', 'id');
+                    })
+            ]));
     }
 }
