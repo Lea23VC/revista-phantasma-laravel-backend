@@ -18,6 +18,7 @@ use Filament\Resources\Tables\Columns;
 use Filament\Resources\Tables\Filter;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\TagsColumn;
 use Filament\Resources\Forms\Components;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
@@ -26,6 +27,7 @@ use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 
 class PostResource extends Resource
 {
@@ -41,6 +43,18 @@ class PostResource extends Resource
                 Forms\Components\TextInput::make('title')->required(),
                 TinyEditor::make('content')->showMenuBar()->language('es')->toolbarSticky(true)->columnSpan('full')->fileAttachmentsDisk('s3')->fileAttachmentsVisibility('public')->fileAttachmentsDirectory('posts_content')->maxWidth("740px")->required(),
                 SpatieMediaLibraryFileUpload::make('featuredImage')->label('Featured image')->disk('s3')->visibility('public')->directory('post_uploads')->image()->required(),
+
+                Select::make('author_id')
+                    ->relationship(name: 'author', titleAttribute: 'name')
+                    ->searchable()
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                            ->required(),
+                        Forms\Components\TextInput::make('url'),
+                        SpatieMediaLibraryFileUpload::make('profilePic')->label('Profile pic')->disk('s3')->visibility('public')->directory('authors_profile_pic')->image(),
+                    ])
+                    ->preload(),
+
                 Select::make('categories')->searchable()
                     ->options(function () {
                         return Category::pluck('name', 'id');
@@ -55,13 +69,18 @@ class PostResource extends Resource
         return $table
             ->columns([
                 //
+                TextColumn::make('id'),
                 TextColumn::make('title'),
-                ImageColumn::make('featuredImage')->square()->disk('s3')->visibility('public'),
+                TextColumn::make('categories.name')
+                    ->listWithLineBreaks()->badge(),
+                SpatieMediaLibraryImageColumn::make('featuredImage')->square()->disk('s3')->visibility('public'),
+                TextColumn::make('author.name')->label('Author'),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -84,6 +103,7 @@ class PostResource extends Resource
             'index' => Pages\ListPosts::route('/'),
             'create' => Pages\CreatePost::route('/create'),
             'edit' => Pages\EditPost::route('/{record}/edit'),
+            'view' => Pages\ViewPost::route('/{record}'),
         ];
     }
 }
