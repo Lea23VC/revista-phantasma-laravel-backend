@@ -1,0 +1,91 @@
+service: revista-phantasma-backend
+
+provider:
+    name: aws
+    # The AWS region in which to deploy (us-east-1 is the default)
+    region: us-east-1
+    # Environment variables
+    # environment:
+    #     APP_ENV: production
+    #     AWS_BUCKET: 
+    #       Ref: MyS3Bucket
+    iamRoleStatements:
+                - Effect: Allow
+                  Action:
+                    - s3:*
+                  Resource: 
+                    - "arn:aws:s3:::revista-phantasma-media/*"
+
+package:
+    # Files and directories to exclude from deployment
+    patterns:
+        - '!node_modules/**'
+        - '!public/storage'
+        - '!resources/assets/**'
+        - '!storage/**'
+        - '!tests/**'
+
+functions:
+
+    # This function runs the Laravel website/API
+    web:
+        handler: public/index.php
+        runtime: php-81-fpm
+        timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
+        events:
+            - httpApi: '*'
+        layers:
+            - ${bref-extra:gd-php-81}
+       
+        
+
+    # This function lets us run artisan commands in Lambda
+    artisan:
+        handler: artisan
+        runtime: php-81-console
+        timeout: 720 # in seconds
+        layers:
+            - ${bref-extra:gd-php-81}
+        # Uncomment to also run the scheduler every minute
+        #events:
+        #    - schedule:
+        #          rate: rate(1 minute)
+        #          input: '"schedule:run"'
+
+constructs:
+    website:
+        type: server-side-website
+        assets:
+            '/js/*': public/js
+            '/css/*': public/css
+            '/favicon.ico': public/favicon.ico
+            '/robots.txt': public/robots.txt
+            '/vendor/telescope/*': public/vendor/telescope
+
+plugins:
+  - ./vendor/bref/bref
+  - serverless-lift
+  - ./vendor/bref/extra-php-extensions 
+
+resources:
+  Resources:
+    MyS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: revista-phantasma-media
+        CorsConfiguration:
+          CorsRules:
+            - AllowedHeaders:
+                - "*"
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              AllowedOrigins:
+                - "http://127.0.0.1:8000"
+                - "https://6bv7jhird5.execute-api.us-east-1.amazonaws.com"
+                - "https://d2nkzp12b3gige.cloudfront.net"
+                - "https://backend-revista-phantasma.aigisbot.xyz"
+      # Define a Bucket Policy to make the bucket public

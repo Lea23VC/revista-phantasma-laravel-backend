@@ -39,12 +39,12 @@ class PostResource extends Resource
             ->schema([
                 //
                 Forms\Components\TextInput::make('title')->required(),
-                TinyEditor::make('content')->columnSpan('full')->required(),
-                SpatieMediaLibraryFileUpload::make('featuredImage')->label('Featured image')->disk('s3')->visibility('public'),
+                TinyEditor::make('content')->showMenuBar()->language('es')->toolbarSticky(true)->columnSpan('full')->fileAttachmentsDisk('s3')->fileAttachmentsVisibility('public')->fileAttachmentsDirectory('posts_content')->maxWidth("740px")->required(),
+                SpatieMediaLibraryFileUpload::make('featuredImage')->label('Featured image')->disk('s3')->visibility('public')->directory('post_uploads')->image()->required(),
                 Select::make('categories')->searchable()
                     ->options(function () {
                         return Category::pluck('name', 'id');
-                    })->multiple(true)->relationship('categories', 'name')->required(),
+                    })->multiple(true)->relationship('categories', 'name')->preload()->required(),
 
 
             ]);
