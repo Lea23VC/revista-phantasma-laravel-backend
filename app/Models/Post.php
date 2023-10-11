@@ -18,6 +18,7 @@ class Post extends Model  implements HasMedia
     protected $fillable = [
         'title',
         'content',
+        'publish_at'
     ];
 
     protected $casts = [
