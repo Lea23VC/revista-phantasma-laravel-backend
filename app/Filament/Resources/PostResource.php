@@ -29,6 +29,7 @@ use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Filters\SelectFilter;
 
 class PostResource extends Resource
 {
@@ -70,7 +71,7 @@ class PostResource extends Resource
             ->columns([
                 //
                 TextColumn::make('id'),
-                TextColumn::make('title'),
+                TextColumn::make('title')->searchable()->sortable(),
                 TextColumn::make('categories.name')
                     ->listWithLineBreaks()->badge(),
                 SpatieMediaLibraryImageColumn::make('featuredImage')->square()->disk('s3')->visibility('public'),
@@ -78,6 +79,8 @@ class PostResource extends Resource
             ])
             ->filters([
                 //
+                SelectFilter::make('categories')->relationship('categories', 'name')->multiple()->preload(),
+
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
