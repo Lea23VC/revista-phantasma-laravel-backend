@@ -136,7 +136,7 @@ resources:
     MyS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: revista-phantasma-media
+        BucketName: revista-phantasma-media-repository
         CorsConfiguration:
           CorsRules:
             - AllowedHeaders:
@@ -152,4 +152,3 @@ resources:
                 - "https://6bv7jhird5.execute-api.us-east-1.amazonaws.com"
                 - "https://d2nkzp12b3gige.cloudfront.net"
                 - "https://backend-revista-phantasma.revista_phantasma.xyz"
-      # Define a Bucket Policy to make the bucket public
