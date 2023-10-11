@@ -28,6 +28,7 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Forms\Components\DatePicker;
 
 class PostResource extends Resource
 {
@@ -41,6 +42,7 @@ class PostResource extends Resource
             ->schema([
                 //
                 Forms\Components\TextInput::make('title')->required(),
+                DatePicker::make('publish_at')->native(false)->default(now()),
                 TinyEditor::make('content')->showMenuBar()->language('es')->toolbarSticky(true)->columnSpan('full')->fileAttachmentsDisk('s3')->fileAttachmentsVisibility('public')->fileAttachmentsDirectory('posts_content')->maxWidth("740px")->required(),
                 SpatieMediaLibraryFileUpload::make('featuredImage')->label('Featured image')->disk('s3')->visibility('public')->directory('post_uploads')->image()->required(),
 
@@ -59,8 +61,6 @@ class PostResource extends Resource
                     ->options(function () {
                         return Category::pluck('name', 'id');
                     })->multiple(true)->relationship('categories', 'name')->preload()->required(),
-
-
             ]);
     }
 
