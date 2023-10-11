@@ -43,8 +43,7 @@ provider:
         # AWS_ACCESS_KEY_ID: ${ssm:/revista_phantasma/prod/AWS_ACCESS_KEY_ID}
         # AWS_SECRET_ACCESS_KEY: ${ssm:/revista_phantasma/prod/AWS_SECRET_ACCESS_KEY}
         # AWS_DEFAULT_REGION: ${ssm:/revista_phantasma/prod/AWS_DEFAULT_REGION}
-        AWS_BUCKET: 
-          Ref: MyS3Bucket
+        AWS_BUCKET: ${ssm:/revista_phantasma/prod/AWS_BUCKET}
         AWS_USE_PATH_STYLE_ENDPOINT: ${ssm:/revista_phantasma/prod/AWS_USE_PATH_STYLE_ENDPOINT}
         # PUSHER_APP_ID: ${ssm:/revista_phantasma/prod/PUSHER_APP_ID}
         # PUSHER_APP_KEY: ${ssm:/revista_phantasma/prod/PUSHER_APP_KEY}
@@ -131,24 +130,24 @@ plugins:
   - serverless-lift
   - ./vendor/bref/extra-php-extensions 
 
-resources:
-  Resources:
-    MyS3Bucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        BucketName: revista-phantasma-media-repository
-        CorsConfiguration:
-          CorsRules:
-            - AllowedHeaders:
-                - "*"
-              AllowedMethods:
-                - GET
-                - PUT
-                - POST
-                - DELETE
-                - HEAD
-              AllowedOrigins:
-                - "http://127.0.0.1:8000"
-                - "https://6bv7jhird5.execute-api.us-east-1.amazonaws.com"
-                - "https://d2nkzp12b3gige.cloudfront.net"
-                - "https://backend-revista-phantasma.revista_phantasma.xyz"
+# resources:
+#   Resources:
+#     MyS3Bucket:
+#       Type: AWS::S3::Bucket
+#       Properties:
+#         BucketName: revista-phantasma-media-repository
+#         CorsConfiguration:
+#           CorsRules:
+#             - AllowedHeaders:
+#                 - "*"
+#               AllowedMethods:
+#                 - GET
+#                 - PUT
+#                 - POST
+#                 - DELETE
+#                 - HEAD
+#               AllowedOrigins:
+#                 - "http://127.0.0.1:8000"
+#                 - "https://6bv7jhird5.execute-api.us-east-1.amazonaws.com"
+#                 - "https://d2nkzp12b3gige.cloudfront.net"
+#                 - "https://backend-revista-phantasma.revista_phantasma.xyz"
