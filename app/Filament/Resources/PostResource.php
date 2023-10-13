@@ -30,6 +30,10 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Forms\Get;
+
+use Filament\Forms\Set;
+use Illuminate\Support\Str;
 
 class PostResource extends Resource
 {
@@ -42,7 +46,20 @@ class PostResource extends Resource
         return $form
             ->schema([
                 //
-                Forms\Components\TextInput::make('title')->required(),
+                Forms\Components\TextInput::make('title')->afterStateUpdated(function (Get $get, Set $set, ?string $state) {
+                    if (!$get('is_slug_changed_manually') && filled($state)) {
+                        $set('slug', Str::slug($state));
+                    }
+                })->reactive()->required(),
+                Forms\Components\TextInput::make('slug')
+                    ->afterStateUpdated(function (Closure $set) {
+                        $set('is_slug_changed_manually', true);
+                    })
+                    ->required(),
+                Forms\Components\Hidden::make('is_slug_changed_manually')
+                    ->default(false)
+                    ->dehydrated(false),
+
                 DatePicker::make('publish_at')->native(false)->default(now()),
                 TinyEditor::make('content')->showMenuBar()->language('es')->toolbarSticky(true)->columnSpan('full')->fileAttachmentsDisk('s3')->fileAttachmentsVisibility('public')->fileAttachmentsDirectory('posts_content')->maxWidth("740px")->required(),
                 SpatieMediaLibraryFileUpload::make('featuredImage')->label('Featured image')->disk('s3')->visibility('public')->directory('post_uploads')->image()->required(),

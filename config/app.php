@@ -170,6 +170,10 @@ return [
         App\Providers\Filament\AdminPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
+
+        /* Lighthouse*/
+        \Nuwave\Lighthouse\WhereConditions\WhereConditionsServiceProvider::class,
+
     ])->toArray(),
 
     /*
