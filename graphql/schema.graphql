@@ -33,7 +33,15 @@ type Query {
     posts(
         "Filters by title. Accepts SQL LIKE wildcards `%` and `_`."
         title: String @where(operator: "like")
-    ): [Post!]! @paginate(defaultCount: 10)
+
+        "Filters by content. Accepts SQL LIKE wildcards `%` and `_`."
+        content: String @where(operator: "like")
+
+        "Filters by category. Accepts SQL LIKE wildcards `%` and `_`."
+        category: String @where(operator: "like")
+
+        hasCategories: _ @whereHasConditions(columns: ["name", "id"])
+    ): [Post] @paginate(defaultCount: 10)
 }
 
 "Account of a person who utilizes this application."
