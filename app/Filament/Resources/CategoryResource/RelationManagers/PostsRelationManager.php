@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Filament\Resources\AuthorResource\RelationManagers;
+namespace App\Filament\Resources\CategoryResource\RelationManagers;
 
-use Filament\Tables\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -16,6 +15,7 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Select;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
+
 class PostsRelationManager extends RelationManager
 {
     protected static string $relationship = 'posts';
@@ -28,10 +28,17 @@ class PostsRelationManager extends RelationManager
                 DatePicker::make('publish_at')->native(false)->default(now()),
                 TinyEditor::make('content')->showMenuBar()->language('es')->toolbarSticky(true)->columnSpan('full')->fileAttachmentsDisk('s3')->fileAttachmentsVisibility('public')->fileAttachmentsDirectory('posts_content')->maxWidth("740px")->required(),
                 SpatieMediaLibraryFileUpload::make('featuredImage')->label('Featured image')->disk('s3')->visibility('public')->directory('post_uploads')->image()->required(),
-                Select::make('categories')->searchable()
-                    ->options(function () {
-                        return Category::pluck('name', 'id');
-                    })->multiple(true)->relationship('categories', 'name')->preload()->required()
+
+                Select::make('author_id')
+                    ->relationship(name: 'author', titleAttribute: 'name')
+                    ->searchable()
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                            ->required(),
+                        Forms\Components\TextInput::make('url'),
+                        SpatieMediaLibraryFileUpload::make('profilePic')->label('Profile pic')->disk('s3')->visibility('public')->directory('authors_profile_pic')->image(),
+                    ])
+                    ->preload(),
             ]);
     }
 
@@ -41,7 +48,6 @@ class PostsRelationManager extends RelationManager
             ->recordTitleAttribute('title')
             ->columns([
                 Tables\Columns\TextColumn::make('title'),
-
             ])
             ->filters([
                 //
@@ -50,9 +56,6 @@ class PostsRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Action::make("Go to post")->url(fn (Post $record): string => '/admin/posts/' . $record->id),
-
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
