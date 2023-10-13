@@ -34,10 +34,10 @@ class Post extends Model  implements HasMedia
     {
         return $this->belongsTo(Author::class);
     }
-    // public function featuredImage(): MorphOne
-    // {
-    //     return $this->morphOne(Image::class, 'imageable');
-    // }
+    public function featuredImage()
+    {
+        return $this->getMedia("default")->first();
+    }
     public function registerMediaConversions(Media $media = null): void
     {
         $this

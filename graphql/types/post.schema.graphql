@@ -4,6 +4,7 @@ type Post {
     slug: String!
     content: String!
     publish_at: DateTime!
+    featured_image: Media @method(name: "featuredImage")
     author: Author @belongsTo
     categories: [Category] @morphMany
 }
