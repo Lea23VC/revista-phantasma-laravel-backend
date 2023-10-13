@@ -66,6 +66,8 @@ class CategoryResource extends Resource
     {
         return [
             //
+            RelationManagers\PostsRelationManager::class,
+
         ];
     }
 
