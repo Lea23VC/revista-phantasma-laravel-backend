@@ -1,0 +1,8 @@
+type Post {
+    id: ID!
+    title: String!
+    content: String!
+    publish_at: DateTime!
+    author: Author @belongsTo
+    categories: [Category] @morphMany
+}

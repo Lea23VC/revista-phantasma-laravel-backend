@@ -19,11 +19,6 @@ class Author extends Model  implements HasMedia
     use HasFactory;
     protected $fillable = ['name', 'url'];
 
-    public function profilePic(): MorphOne
-    {
-        return $this->morphOne(Image::class, 'imageable');
-    }
-
     public function registerMediaConversions(Media $media = null): void
     {
         $this
