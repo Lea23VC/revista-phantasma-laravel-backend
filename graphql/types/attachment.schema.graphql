@@ -1,0 +1,8 @@
+type Attachment {
+    title: String
+    description: String
+    post: Post @belongsTo
+    file: Media @method(name: "file")
+    created_at: DateTime
+    updated_at: DateTime
+}

@@ -22,4 +22,8 @@ class Attachment extends Model implements HasMedia
     {
         return $this->belongsTo(Post::class);
     }
+    public function file()
+    {
+        return $this->getMedia("files")->first();
+    }
 }

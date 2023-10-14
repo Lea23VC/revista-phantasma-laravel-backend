@@ -90,7 +90,7 @@ class PostResource extends Resource
                         Forms\Components\TextInput::make('title'),
                         Textarea::make('description'),
                         SpatieMediaLibraryFileUpload::make('attachment')
-                            ->collection('attachments')->disk('s3')->visibility('public')->directory('post_attachments')->image(),
+                            ->collection('files')->disk('s3')->visibility('public')->directory('post_attachments')->image(),
                     ])->grid(2)->columnSpan('full'),
 
 
