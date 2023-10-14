@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\MediaLibrary\HasMedia;
@@ -24,6 +25,7 @@ class Post extends Model  implements HasMedia
 
     protected $casts = [
         'categories' => 'array',
+        'attachments' => 'array',
     ];
 
     use HasTags;
@@ -49,5 +51,10 @@ class Post extends Model  implements HasMedia
     public function categories(): MorphToMany
     {
         return $this->morphToMany(Category::class, 'categorizable');
+    }
+
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(Attachment::class);
     }
 }

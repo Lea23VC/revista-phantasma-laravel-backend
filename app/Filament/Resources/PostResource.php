@@ -34,6 +34,8 @@ use Filament\Forms\Get;
 
 use Filament\Forms\Set;
 use Illuminate\Support\Str;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Textarea;
 
 class PostResource extends Resource
 {
@@ -61,8 +63,6 @@ class PostResource extends Resource
                     ->dehydrated(false),
 
                 DatePicker::make('publish_at')->native(false)->default(now()),
-                TinyEditor::make('content')->showMenuBar()->language('es')->toolbarSticky(true)->columnSpan('full')->fileAttachmentsDisk('s3')->fileAttachmentsVisibility('public')->fileAttachmentsDirectory('posts_content')->maxWidth("740px")->required(),
-                SpatieMediaLibraryFileUpload::make('featuredImage')->label('Featured image')->disk('s3')->visibility('public')->directory('post_uploads')->image()->required(),
 
                 Select::make('author_id')
                     ->relationship(name: 'author', titleAttribute: 'name')
@@ -75,10 +75,27 @@ class PostResource extends Resource
                     ])
                     ->preload(),
 
+                TinyEditor::make('content')->showMenuBar()->language('es')->toolbarSticky(true)->columnSpan('full')->fileAttachmentsDisk('s3')->fileAttachmentsVisibility('public')->fileAttachmentsDirectory('posts_content')->maxWidth("740px")->required(),
+                SpatieMediaLibraryFileUpload::make('featuredImage')->label('Featured image')->disk('s3')->visibility('public')->directory('post_uploads')->image()->required(),
+
+
+
                 Select::make('categories')->searchable()
                     ->options(function () {
                         return Category::pluck('name', 'id');
                     })->multiple(true)->relationship('categories', 'name')->preload()->required(),
+
+                Repeater::make('attachments')->relationship('attachments')
+                    ->schema([
+                        Forms\Components\TextInput::make('title'),
+                        Textarea::make('description'),
+                        SpatieMediaLibraryFileUpload::make('attachment')
+                            ->collection('attachments')->disk('s3')->visibility('public')->directory('post_attachments')->image(),
+                    ])->grid(2)->columnSpan('full'),
+
+
+
+
             ]);
     }
 
