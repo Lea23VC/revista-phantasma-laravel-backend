@@ -39,7 +39,7 @@ class CategoryResource extends Resource
 
 
                 Forms\Components\TextInput::make('slug')
-                    ->afterStateUpdated(function (Closure $set) {
+                    ->afterStateUpdated(function (Set $set) {
                         $set('is_slug_changed_manually', true);
                     })
                     ->required(),

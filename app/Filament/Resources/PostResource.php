@@ -32,6 +32,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Forms\Get;
 
+
 use Filament\Forms\Set;
 use Illuminate\Support\Str;
 use Filament\Forms\Components\Repeater;
@@ -54,7 +55,7 @@ class PostResource extends Resource
                     }
                 })->reactive()->required(),
                 Forms\Components\TextInput::make('slug')
-                    ->afterStateUpdated(function (Closure $set) {
+                    ->afterStateUpdated(function (Set $set) {
                         $set('is_slug_changed_manually', true);
                     })
                     ->required(),
