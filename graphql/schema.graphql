@@ -50,6 +50,9 @@ type Query {
         category: String @where(operator: "like")
 
         hasCategories: _ @whereHasConditions(columns: ["name", "id"])
+
+        "Exclude posts give a slug."
+        slug: [String] @notIn(column: "slug")
     ): [Post] @paginate(defaultCount: 10)
 
     "Find a single post by an identifying attribute."
