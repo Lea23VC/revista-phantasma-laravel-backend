@@ -26,7 +26,24 @@ class CategoryResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
+                    ->afterStateUpdated(function (Get $get, Set $set, ?string $state) {
+                        if (!$get('is_slug_changed_manually') && filled($state)) {
+                            $set('slug', Str::slug($state));
+                        }
+                    })->reactive()
                     ->maxLength(255),
+
+
+                Forms\Components\TextInput::make('slug')
+                    ->afterStateUpdated(function (Closure $set) {
+                        $set('is_slug_changed_manually', true);
+                    })
+                    ->required(),
+
+                Forms\Components\Hidden::make('is_slug_changed_manually')
+                    ->default(false)
+                    ->dehydrated(false),
+
                 SpatieMediaLibraryFileUpload::make('background')
                     ->label('Background')
                     ->disk('s3')->visibility('public')->directory('category_backgrounds')

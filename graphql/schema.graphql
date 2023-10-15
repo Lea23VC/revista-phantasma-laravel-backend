@@ -63,6 +63,21 @@ type Query {
         "Search by slug."
         slug: String @eq @rules(apply: ["prohibits:id", "required_without:id"])
     ): Post @find
+
+    "List multiple categories."
+    categories(
+        "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
+        name: String @where(operator: "like")
+    ): [Category!]! @paginate(defaultCount: 10)
+
+    "Find a single category by an identifying attribute."
+    category(
+        "Search by primary key."
+        id: ID @eq @rules(apply: ["prohibits:slug", "required_without:slug"])
+
+        "Search by slug."
+        slug: String @eq @rules(apply: ["prohibits:id", "required_without:id"])
+    ): Category @find
 }
 
 "Account of a person who utilizes this application."
