@@ -37,6 +37,9 @@ type Query {
     ): [User!]! @paginate(defaultCount: 10)
 
     posts(
+        "Order the posts by a given column direction pair."
+        orderBy: _ @orderBy(columns: ["publish_at", "title"])
+
         "Filters by title. Accepts SQL LIKE wildcards `%` and `_`."
         title: String @where(operator: "like")
 
