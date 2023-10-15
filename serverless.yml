@@ -157,6 +157,4 @@ custom:
   warmup:
     studentHoursWarmer:
       enabled: true
-      events:
-        - schedule: cron(0/5 8-23 ? * MON-SUN * )
       verbose: true
