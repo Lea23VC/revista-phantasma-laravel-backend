@@ -76,7 +76,11 @@ class PostResource extends Resource
                     ->preload(),
 
                 TinyEditor::make('content')->showMenuBar()->language('es')->toolbarSticky(true)->columnSpan('full')->fileAttachmentsDisk('s3')->fileAttachmentsVisibility('public')->fileAttachmentsDirectory('posts_content')->maxWidth("740px")->required(),
-                SpatieMediaLibraryFileUpload::make('featuredImage')->label('Featured image')->disk('s3')->visibility('public')->directory('post_uploads')->image()->required(),
+                SpatieMediaLibraryFileUpload::make('featuredImage')
+                    ->label('Featured image')
+                    ->disk('s3')->visibility('public')->directory('post_uploads')
+                    ->image()
+                    ->optimize('webp')->required(),
 
 
 

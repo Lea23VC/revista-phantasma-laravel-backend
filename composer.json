@@ -16,6 +16,7 @@
         "filament/spatie-laravel-media-library-plugin": "^3.0-stable",
         "filament/spatie-laravel-tags-plugin": "^3.0-stable",
         "guzzlehttp/guzzle": "^7.2",
+        "joshembling/image-optimizer": "^1.1",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
         "laravel/telescope": "^4.16",

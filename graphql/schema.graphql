@@ -48,6 +48,15 @@ type Query {
 
         hasCategories: _ @whereHasConditions(columns: ["name", "id"])
     ): [Post] @paginate(defaultCount: 10)
+
+    "Find a single post by an identifying attribute."
+    post(
+        "Search by primary key."
+        id: ID @eq @rules(apply: ["prohibits:slug", "required_without:slug"])
+
+        "Search by slug."
+        slug: String @eq @rules(apply: ["prohibits:id", "required_without:id"])
+    ): Post @find
 }
 
 "Account of a person who utilizes this application."
