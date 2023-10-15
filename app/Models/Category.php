@@ -18,7 +18,7 @@ class Category extends Model implements HasMedia
 
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'slug'];
 
     public function posts(): MorphToMany
     {
