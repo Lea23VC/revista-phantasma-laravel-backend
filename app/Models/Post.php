@@ -13,6 +13,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Image\Manipulations;
 use Spatie\Tags\HasTags;
+use App\Casts\SpanishDateCast;
 
 class Post extends Model  implements HasMedia
 {
@@ -26,6 +27,7 @@ class Post extends Model  implements HasMedia
     protected $casts = [
         'categories' => 'array',
         'attachments' => 'array',
+        'publish_at'  => SpanishDateCast::class
     ];
 
     use HasTags;
