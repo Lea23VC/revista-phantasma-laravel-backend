@@ -3,7 +3,7 @@ type Post {
     title: String!
     slug: String!
     content: String!
-    publish_at: DateTime!
+    publish_at: String!
     attachments: [Attachment] @hasMany
     featured_image: Media @method(name: "featuredImage")
     author: Author @belongsTo
