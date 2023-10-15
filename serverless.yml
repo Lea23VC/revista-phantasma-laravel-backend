@@ -158,6 +158,5 @@ custom:
     studentHoursWarmer:
       enabled: true
       events:
-        - schedule: cron(0/5 8-23 ? * * )
+        - schedule: cron(0/5 8-23 ? * MON-SUN * )
       verbose: true
-      logRetentionInDays: 10
