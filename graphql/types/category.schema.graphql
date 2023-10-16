@@ -2,6 +2,7 @@ type Category {
     id: ID!
     name: String!
     slug: String
+    background: Media @method(name: "background")
     posts: [Post] @morphToMany
 }
 
