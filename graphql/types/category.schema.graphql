@@ -2,7 +2,7 @@ type Category {
     id: ID!
     name: String!
     slug: String
-    categorizable: Categorizable! @morphTo
+    posts: [Post] @morphToMany
 }
 
 union Categorizable = Post
