@@ -9,11 +9,20 @@ type Media {
     size: Int!
     manipulations: [String]
     custom_properties: [String]
-    responsive_images: [String]
+    responsive_images: [ResponsiveImage]
     order_column: Int
     conversions_disk: String!
     created_at: String!
     updated_at: String!
     original_url: String!
     preview_url: String!
+}
+
+type ResponsiveImage {
+    media_library_original: [MediaLibraryOriginal]
+}
+
+type MediaLibraryOriginal {
+    urls: [String]
+    base64svg: String
 }

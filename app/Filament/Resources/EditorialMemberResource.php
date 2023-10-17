@@ -44,7 +44,7 @@ class EditorialMemberResource extends Resource
                     ->label('Profile pic')->disk('s3')
                     ->visibility('public')
                     ->directory('editorial_members_profile_pic')
-                    ->collection('profile_pic')
+                    ->collection('profile_pic')->responsiveImages()
                     ->image()->optimize('webp'),
 
                 Select::make('author_id')->label("Existing author?")

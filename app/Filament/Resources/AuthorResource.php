@@ -33,7 +33,10 @@ class AuthorResource extends Resource
                 //
                 Forms\Components\TextInput::make('name')->required(),
                 Forms\Components\TextInput::make('url'),
-                SpatieMediaLibraryFileUpload::make('profilePic')->label('Profile pic')->disk('s3')->visibility('public')->directory('authors_profile_pic')->image(),
+                SpatieMediaLibraryFileUpload::make('profilePic')
+                    ->label('Profile pic')->disk('s3')
+                    ->visibility('public')->responsiveImages()
+                    ->directory('authors_profile_pic')->image(),
             ]);
     }
 

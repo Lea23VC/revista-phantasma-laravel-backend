@@ -27,7 +27,10 @@ class PostsRelationManager extends RelationManager
                 Forms\Components\TextInput::make('title')->required(),
                 DatePicker::make('publish_at')->native(false)->default(now()),
                 TinyEditor::make('content')->showMenuBar()->language('es')->toolbarSticky(true)->columnSpan('full')->fileAttachmentsDisk('s3')->fileAttachmentsVisibility('public')->fileAttachmentsDirectory('posts_content')->maxWidth("740px")->required(),
-                SpatieMediaLibraryFileUpload::make('featuredImage')->label('Featured image')->disk('s3')->visibility('public')->directory('post_uploads')->image()->required(),
+                SpatieMediaLibraryFileUpload::make('featuredImage')
+                    ->label('Featured image')->disk('s3')->responsiveImages()
+                    ->visibility('public')->directory('post_uploads')
+                    ->image()->required(),
 
                 Select::make('author_id')
                     ->relationship(name: 'author', titleAttribute: 'name')
@@ -36,7 +39,9 @@ class PostsRelationManager extends RelationManager
                         Forms\Components\TextInput::make('name')
                             ->required(),
                         Forms\Components\TextInput::make('url'),
-                        SpatieMediaLibraryFileUpload::make('profilePic')->label('Profile pic')->disk('s3')->visibility('public')->directory('authors_profile_pic')->image(),
+                        SpatieMediaLibraryFileUpload::make('profilePic')
+                            ->label('Profile pic')->disk('s3')->responsiveImages()
+                            ->visibility('public')->directory('authors_profile_pic')->image(),
                     ])
                     ->preload(),
             ]);

@@ -28,7 +28,6 @@ class EditorialMember extends Model implements HasMedia
         $this
             ->addMediaConversion('preview')
             ->fit(Manipulations::FIT_CROP, 300, 300)
-            ->withResponsiveImages()
             ->nonQueued();
     }
 }

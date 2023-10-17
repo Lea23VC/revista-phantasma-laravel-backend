@@ -72,7 +72,9 @@ class PostResource extends Resource
                         Forms\Components\TextInput::make('name')
                             ->required(),
                         Forms\Components\TextInput::make('url'),
-                        SpatieMediaLibraryFileUpload::make('profilePic')->label('Profile pic')->disk('s3')->visibility('public')->directory('authors_profile_pic')->image(),
+                        SpatieMediaLibraryFileUpload::make('profilePic')
+                            ->label('Profile pic')->disk('s3')->responsiveImages()
+                            ->visibility('public')->directory('authors_profile_pic')->image(),
                     ])
                     ->preload(),
 
@@ -80,7 +82,7 @@ class PostResource extends Resource
                 SpatieMediaLibraryFileUpload::make('featuredImage')
                     ->label('Featured image')
                     ->disk('s3')->visibility('public')->directory('post_uploads')
-                    ->image()
+                    ->image()->responsiveImages()
                     ->optimize('webp')->required(),
 
 
@@ -95,7 +97,9 @@ class PostResource extends Resource
                         Forms\Components\TextInput::make('title'),
                         Textarea::make('description'),
                         SpatieMediaLibraryFileUpload::make('attachment')
-                            ->collection('files')->disk('s3')->visibility('public')->directory('post_attachments')->image(),
+                            ->collection('files')->disk('s3')
+                            ->visibility('public')->responsiveImages()
+                            ->directory('post_attachments')->image(),
                     ])->grid(2)->columnSpan('full'),
 
 

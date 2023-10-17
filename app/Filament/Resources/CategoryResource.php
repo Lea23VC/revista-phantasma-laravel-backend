@@ -52,6 +52,7 @@ class CategoryResource extends Resource
                     ->label('Background')
                     ->disk('s3')->visibility('public')->directory('category_backgrounds')
                     ->collection('backgrounds')->image()
+                    ->responsiveImages()
                     ->optimize('webp')->required(),
 
             ]);
