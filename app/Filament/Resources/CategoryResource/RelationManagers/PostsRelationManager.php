@@ -42,7 +42,7 @@ class PostsRelationManager extends RelationManager
                         SpatieMediaLibraryFileUpload::make('profilePic')
                             ->label('Profile pic')->disk('s3')->responsiveImages()
                             ->visibility('public')->directory('authors_profile_pic')->image(),
-                    ])
+                    ])->required()
                     ->preload(),
             ]);
     }
