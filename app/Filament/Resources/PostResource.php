@@ -57,7 +57,7 @@ class PostResource extends Resource
                 Forms\Components\TextInput::make('slug')
                     ->afterStateUpdated(function (Set $set) {
                         $set('is_slug_changed_manually', true);
-                    })
+                    })->unique()
                     ->required(),
                 Forms\Components\Hidden::make('is_slug_changed_manually')
                     ->default(false)
