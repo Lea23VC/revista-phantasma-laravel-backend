@@ -57,7 +57,7 @@ class PostResource extends Resource
                 Forms\Components\TextInput::make('slug')
                     ->afterStateUpdated(function (Set $set) {
                         $set('is_slug_changed_manually', true);
-                    })->unique()
+                    })->unique(ignorable: fn ($record) => $record)
                     ->required(),
                 Forms\Components\Hidden::make('is_slug_changed_manually')
                     ->default(false)
@@ -98,9 +98,9 @@ class PostResource extends Resource
                         Textarea::make('description'),
                         SpatieMediaLibraryFileUpload::make('attachment')
                             ->collection('files')->disk('s3')
-                            ->visibility('public')->responsiveImages()
-                            ->directory('post_attachments')->image(),
-                    ])->grid(2)->columnSpan('full'),
+                            ->visibility('public')
+                            ->directory('post_attachments'),
+                    ])->grid(2)->columnSpan('full')->defaultItems(0),
 
 
 
