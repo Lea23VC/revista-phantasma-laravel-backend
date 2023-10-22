@@ -117,7 +117,7 @@ class PostResource extends Resource
                             ]),
                         SpatieMediaLibraryFileUpload::make('attachment')
                             ->collection('files')->disk('s3')
-                            ->visibility('public')->enableReordering(true)
+                            ->visibility('public')->reorderable(true)->preserveFilenames(true)
                             ->directory('post_attachments')->multiple(true),
                     ])->grid(2)->columnSpan('full')->defaultItems(0)
             ]
