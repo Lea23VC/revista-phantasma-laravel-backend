@@ -21,6 +21,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use RyanChandler\FilamentNavigation\FilamentNavigation;
 use Filament\Forms\Components\Select;
 use App\Models\Post;
+use Marjose123\FilamentWebhookServer\WebhookPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -57,7 +58,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])->plugin(FilamentNavigation::make()->itemType('Posts', [
+            ])->plugins([FilamentNavigation::make()->itemType('Posts', [
                 Select::make('post_id')
                     ->searchable()
                     ->options(function () {
@@ -71,6 +72,6 @@ class AdminPanelProvider extends PanelProvider
                         return Category::pluck('name', 'id');
                     }),
 
-            ]));
+            ]), WebhookPlugin::make()]);
     }
 }
