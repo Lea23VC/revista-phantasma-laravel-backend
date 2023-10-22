@@ -20,7 +20,9 @@ return [
                 'image_advtab' => true,
 
             ],
+            "content_style" => "body {color: red !important;}",
             'width' => 800,
+            "dark_mode" => false,
 
         ],
 

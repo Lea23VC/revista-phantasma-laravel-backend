@@ -53,8 +53,8 @@ class PostsRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Action::make("Go to post")->url(fn (Post $record): string => '/admin/posts/' . $record->id),
+
+                Action::make("Go to post")->url(fn (Post $record): string => 'https://revista-phantasma-nuxt-vue-frontend.vercel.app/post/' . $record->id, true),
 
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
