@@ -33,6 +33,7 @@ use Filament\Forms\Get;
 use Filament\Forms\Components\Tabs;
 
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Toggle;
 
 use Filament\Forms\Set;
 use Illuminate\Support\Str;
@@ -94,17 +95,35 @@ class PostResource extends Resource
                             return Category::pluck('name', 'id');
                         })->multiple(true)->relationship('categories', 'name')->preload()->required(),
 
-                    Repeater::make('attachments')->relationship('attachments')
-                        ->schema([
-                            Forms\Components\TextInput::make('title'),
-                            Textarea::make('description'),
-                            SpatieMediaLibraryFileUpload::make('attachment')
-                                ->collection('files')->disk('s3')
-                                ->visibility('public')
-                                ->directory('post_attachments'),
-                        ])->grid(2)->columnSpan('full')->defaultItems(0)
                 ]),
         ]);
+
+        $attachmentsTab =  Tabs\Tab::make("Post attachments")->schema([Section::make("Attachments")->schema(
+
+            [
+
+                TinyEditor::make('attachments_paragraph')
+                    ->showMenuBar()->language('es')->toolbarSticky(true)
+                    ->columnSpan('full')->fileAttachmentsDisk('s3')
+                    ->fileAttachmentsVisibility('public')
+                    ->fileAttachmentsDirectory('posts_attachment_paragraph')
+                    ->maxWidth("740px"),
+                Select::make('position')
+                    ->options([
+                        'start' => 'At the start of the post',
+                        'end' => 'At the end of the post',
+                    ]),
+                Repeater::make('attachments')->label("Attachments files")->relationship('attachments')
+                    ->schema([
+                        Forms\Components\TextInput::make('title'),
+                        Textarea::make('description'),
+                        SpatieMediaLibraryFileUpload::make('attachment')
+                            ->collection('files')->disk('s3')
+                            ->visibility('public')
+                            ->directory('post_attachments'),
+                    ])->grid(2)->columnSpan('full')->defaultItems(0)
+            ]
+        )]);
 
         $SEOtab = Tabs\Tab::make("SEO")->schema([]);
 
@@ -112,7 +131,7 @@ class PostResource extends Resource
             ->schema([
                 //
                 Tabs::make('Label')->tabs([
-                    $postInfoTab, $SEOtab
+                    $postInfoTab, $attachmentsTab, $SEOtab
                 ])->contained(false)->columnSpan('full'),
 
             ]);
