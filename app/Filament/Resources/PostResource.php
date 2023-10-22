@@ -98,32 +98,30 @@ class PostResource extends Resource
                 ]),
         ]);
 
-        $attachmentsTab =  Tabs\Tab::make("Post attachments")->schema([Section::make("Attachments")->schema(
-
+        $attachmentsTab =  Tabs\Tab::make("Post attachments")->schema(
             [
 
-                TinyEditor::make('attachments_paragraph')
-                    ->showMenuBar()->language('es')->toolbarSticky(true)
-                    ->columnSpan('full')->fileAttachmentsDisk('s3')
-                    ->fileAttachmentsVisibility('public')
-                    ->fileAttachmentsDirectory('posts_attachment_paragraph')
-                    ->maxWidth("740px"),
-                Select::make('position')
-                    ->options([
-                        'start' => 'At the start of the post',
-                        'end' => 'At the end of the post',
-                    ]),
+
                 Repeater::make('attachments')->label("Attachments files")->relationship('attachments')
                     ->schema([
-                        Forms\Components\TextInput::make('title'),
-                        Textarea::make('description'),
+                        TinyEditor::make('description')
+                            ->showMenuBar()->language('es')->toolbarSticky(true)
+                            ->columnSpan('full')->fileAttachmentsDisk('s3')
+                            ->fileAttachmentsVisibility('public')
+                            ->fileAttachmentsDirectory('description_attachments')
+                            ->maxWidth("740px"),
+                        Select::make('position')
+                            ->options([
+                                'start' => 'At the start of the post',
+                                'end' => 'At the end of the post',
+                            ]),
                         SpatieMediaLibraryFileUpload::make('attachment')
                             ->collection('files')->disk('s3')
-                            ->visibility('public')
-                            ->directory('post_attachments'),
+                            ->visibility('public')->enableReordering(true)
+                            ->directory('post_attachments')->multiple(true),
                     ])->grid(2)->columnSpan('full')->defaultItems(0)
             ]
-        )]);
+        );
 
         $SEOtab = Tabs\Tab::make("SEO")->schema([]);
 
