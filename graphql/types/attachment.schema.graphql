@@ -1,8 +1,9 @@
 type Attachment {
     title: String
     description: String
+    position: String
     post: Post @belongsTo
-    files: [Media] @method(name: "file")
+    files: [Media] @method(name: "files")
     created_at: DateTime
     updated_at: DateTime
 }
