@@ -104,7 +104,7 @@ class PostResource extends Resource
 
                 Repeater::make('attachments')->label("Attachments files")->relationship('attachments')
                     ->schema([
-                        TinyEditor::make('description')
+                        TinyEditor::make('description')->label('Attachments description')
                             ->showMenuBar()->language('es')->toolbarSticky(true)
                             ->columnSpan('full')->fileAttachmentsDisk('s3')
                             ->fileAttachmentsVisibility('public')
@@ -119,7 +119,7 @@ class PostResource extends Resource
                             ->collection('files')->disk('s3')
                             ->visibility('public')->reorderable(true)->preserveFilenames(true)
                             ->directory('post_attachments')->multiple(true),
-                    ])->grid(2)->columnSpan('full')->defaultItems(0)
+                    ])->columnSpan('full')->defaultItems(0)
             ]
         );
 
