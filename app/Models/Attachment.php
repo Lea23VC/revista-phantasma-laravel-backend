@@ -16,7 +16,7 @@ class Attachment extends Model implements HasMedia
     use HasFactory;
     use InteractsWithMedia;
 
-    protected $fillable = ['title', 'description', 'post_id'];
+    protected $fillable = ['title', 'description', 'post_id', 'position'];
 
     public function post(): BelongsTo
     {
