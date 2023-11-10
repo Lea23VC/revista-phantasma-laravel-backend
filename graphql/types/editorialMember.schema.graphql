@@ -1,0 +1,7 @@
+type EditorialMember {
+    id: ID!
+    name: String
+    email: String
+    position: String
+    author: Author @belongsTo
+}

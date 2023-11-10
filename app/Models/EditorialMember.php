@@ -16,7 +16,7 @@ class EditorialMember extends Model implements HasMedia
     use InteractsWithMedia;
 
     use HasFactory;
-    protected $fillable = ['name', 'email', 'author_id'];
+    protected $fillable = ['name', 'email', 'position', 'author_id'];
 
     public function author(): BelongsTo
     {
