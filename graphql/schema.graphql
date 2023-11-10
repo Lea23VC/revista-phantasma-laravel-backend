@@ -13,6 +13,9 @@
 # import attachment definition
 #import ./types/attachment.schema.graphql
 
+# import editorial member definition
+#import ./types/editorialMember.schema.graphql
+
 "A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
 scalar DateTime
     @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
@@ -78,6 +81,9 @@ type Query {
         "Search by slug."
         slug: String @eq @rules(apply: ["prohibits:id", "required_without:id"])
     ): Category @find
+
+    "List of all editorial members."
+    editorialMembers: [EditorialMember!]! @all
 }
 
 "Account of a person who utilizes this application."
