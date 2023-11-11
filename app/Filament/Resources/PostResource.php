@@ -3,28 +3,17 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PostResource\Pages;
-use App\Filament\Resources\PostResource\RelationManagers;
 use App\Models\Category;
 use App\Models\Post;
 use Filament\Forms;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Resources\Tables\Columns;
-use Filament\Resources\Tables\Filter;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\TagsColumn;
-use Filament\Resources\Forms\Components;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Section;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Filament\Forms\Components\SpatieTagsInput;
+
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Forms\Components\DatePicker;
@@ -33,13 +22,13 @@ use Filament\Forms\Get;
 use Filament\Forms\Components\Tabs;
 
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Toggle;
 
 use Filament\Forms\Set;
 use Illuminate\Support\Str;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\Action;
+
+use RalphJSmit\Filament\SEO\SEO;
 
 class PostResource extends Resource
 {
@@ -123,7 +112,9 @@ class PostResource extends Resource
             ]
         );
 
-        $SEOtab = Tabs\Tab::make("SEO")->schema([]);
+        $SEOtab = Tabs\Tab::make("SEO")->schema([
+            SEO::make(),
+        ]);
 
         return $form
             ->schema([
