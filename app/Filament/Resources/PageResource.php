@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
 class PageResource extends Resource
 {
@@ -28,12 +29,18 @@ class PageResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\TextInput::make('title')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(255),
+                SpatieMediaLibraryFileUpload::make('backgroundImage')
+                    ->label('Background image')
+                    ->disk('s3')->visibility('public')
+                    ->directory('pages_background_images')
+                    ->image()->responsiveImages()
+                    ->optimize('webp'),
                 Forms\Components\Textarea::make('content')
                     ->maxLength(65535)
                     ->columnSpanFull(),
@@ -44,7 +51,7 @@ class PageResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('title')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),

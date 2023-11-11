@@ -1,0 +1,7 @@
+type Page {
+    id: ID!
+    title: String
+    slug: String
+    content: String
+    background_image: Media @method(name: "backgroundImage")
+}
