@@ -16,6 +16,9 @@
 # import editorial member definition
 #import ./types/editorialMember.schema.graphql
 
+# import page definition
+#import ./types/page.schema.graphql
+
 "A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
 scalar DateTime
     @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
@@ -84,6 +87,15 @@ type Query {
 
     "List of all editorial members."
     editorialMembers: [EditorialMember!]! @all
+
+    "Find a single page"
+    page(
+        "Search by primary key."
+        id: ID @eq @rules(apply: ["prohibits:slug", "required_without:slug"])
+
+        "Search by slug."
+        slug: String @eq @rules(apply: ["prohibits:id", "required_without:id"])
+    ): Page @find
 }
 
 "Account of a person who utilizes this application."

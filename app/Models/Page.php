@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Image\Manipulations;
 
 class Page extends Model implements HasMedia
 {
     use HasFactory;
-    protected $fillable = ['name', 'slug', 'content'];
+    protected $fillable = ['title', 'slug', 'content'];
 
     use InteractsWithMedia;
 
@@ -22,5 +23,9 @@ class Page extends Model implements HasMedia
             ->addMediaConversion('preview')
             ->fit(Manipulations::FIT_CROP, 300, 300)
             ->nonQueued();
+    }
+    public function backgroundImage()
+    {
+        return $this->getMedia("default")->first();
     }
 }
