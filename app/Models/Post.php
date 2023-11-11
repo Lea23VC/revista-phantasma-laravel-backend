@@ -14,6 +14,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Image\Manipulations;
 use Spatie\Tags\HasTags;
 use App\Casts\SpanishDateCast;
+use RalphJSmit\Laravel\SEO\Support\HasSEO;
 
 class Post extends Model  implements HasMedia
 {
@@ -33,6 +34,7 @@ class Post extends Model  implements HasMedia
     use HasTags;
     use HasFactory;
     use InteractsWithMedia;
+    use HasSEO;
 
     public function author(): BelongsTo
     {
