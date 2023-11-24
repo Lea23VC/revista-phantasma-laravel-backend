@@ -15,6 +15,7 @@ use Spatie\Image\Manipulations;
 use Spatie\Tags\HasTags;
 use App\Casts\SpanishDateCast;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
+use Illuminate\Support\Str;
 
 class Post extends Model  implements HasMedia
 {
@@ -60,5 +61,12 @@ class Post extends Model  implements HasMedia
     public function attachments(): HasMany
     {
         return $this->hasMany(Attachment::class);
+    }
+
+    public function getContentWithoutHTMLAttribute()
+    {
+        $cleanContent = strip_tags($this->content);
+        $cleanContent = str_replace("\n", "", $cleanContent); // Remove newline characters
+        return Str::limit($cleanContent, 150);
     }
 }
