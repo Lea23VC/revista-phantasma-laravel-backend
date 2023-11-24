@@ -1,5 +1,5 @@
 type Author {
     id: ID!
     name: String!
-    posts: [Post!]! @hasMany
+    posts: [Post] @hasMany
 }

@@ -96,6 +96,9 @@ type Query {
         "Search by slug."
         slug: String @eq @rules(apply: ["prohibits:id", "required_without:id"])
     ): Page @find
+
+    "Find a single author"
+    author("Search by primary key." id: ID @eq): Author @find
 }
 
 "Account of a person who utilizes this application."
