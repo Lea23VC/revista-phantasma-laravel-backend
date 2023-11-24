@@ -3,6 +3,7 @@ type Post {
     title: String!
     slug: String!
     content: String!
+    content_without_html: String
     publish_at: String!
     attachments: [Attachment] @hasMany
     featured_image: Media @method(name: "featuredImage")
