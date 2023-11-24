@@ -28,7 +28,8 @@
         "mohamedsabil83/filament-forms-tinyeditor": "^2.0",
         "nuwave/lighthouse": "^6.22",
         "ralphjsmit/laravel-filament-seo": "^1.2",
-        "ryangjchandler/filament-navigation": "*"
+        "ryangjchandler/filament-navigation": "*",
+        "spatie/eloquent-sortable": "^4.0"
     },
     "require-dev": {
         "doctrine/dbal": "^3.7",

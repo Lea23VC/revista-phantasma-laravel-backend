@@ -62,12 +62,9 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('categorizable_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('order')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('categorizable_type')
+                Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -77,12 +74,16 @@ class CategoryResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            ])->defaultSort('order', 'asc')
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('up')->icon('heroicon-o-chevron-up')
+                    ->action(fn (Category $record) => $record->moveOrderUp()),
+                Tables\Actions\Action::make('down')->icon('heroicon-o-chevron-down')
+                    ->action(fn (Category $record) => $record->moveOrderDown()),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -107,5 +108,10 @@ class CategoryResource extends Resource
             'create' => Pages\CreateCategory::route('/create'),
             'edit' => Pages\EditCategory::route('/{record}/edit'),
         ];
+    }
+
+    protected function getTableQuery(): Builder
+    {
+        return parent::getTableQuery()->orderBy('order');
     }
 }

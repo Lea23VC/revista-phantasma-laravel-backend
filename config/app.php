@@ -174,6 +174,9 @@ return [
         /* Lighthouse*/
         \Nuwave\Lighthouse\WhereConditions\WhereConditionsServiceProvider::class,
 
+        /* Sortable behaviour for Eloquent models */
+        Spatie\EloquentSortable\EloquentSortableServiceProvider::class,
+
     ])->toArray(),
 
     /*
