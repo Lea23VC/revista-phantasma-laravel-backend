@@ -74,7 +74,7 @@ type Query {
     categories(
         "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
         name: String @where(operator: "like")
-    ): [Category!]! @paginate(defaultCount: 10)
+    ): [Category!]! @all
 
     "Find a single category by an identifying attribute."
     category(
