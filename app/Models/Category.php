@@ -11,12 +11,17 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Image\Manipulations;
 use Spatie\Tags\HasTags;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
-class Category extends Model implements HasMedia
+class Category extends Model implements HasMedia, Sortable
 {
     use InteractsWithMedia;
 
+    use SortableTrait;
+
     use HasFactory;
+
 
     protected $fillable = ['name', 'slug'];
 
