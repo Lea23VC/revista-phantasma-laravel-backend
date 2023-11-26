@@ -59,6 +59,9 @@ type Query {
 
         "Exclude posts give a slug."
         slug: [String] @notIn(column: "slug")
+
+        "Filters by author"
+        hasAuthor: _ @whereHasConditions(columns: ["name", "id"])
     ): [Post] @paginate(defaultCount: 10)
 
     "Find a single post by an identifying attribute."
