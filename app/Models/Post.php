@@ -12,7 +12,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Image\Manipulations;
-use Spatie\Tags\HasTags;
+
 use App\Casts\SpanishDateCast;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
 use Illuminate\Support\Str;
@@ -23,7 +23,8 @@ class Post extends Model  implements HasMedia
         'title',
         'slug',
         'content',
-        'publish_at'
+        'publish_at',
+        'author_id',
     ];
 
     protected $casts = [
@@ -32,7 +33,6 @@ class Post extends Model  implements HasMedia
         'publish_at'  => SpanishDateCast::class
     ];
 
-    use HasTags;
     use HasFactory;
     use InteractsWithMedia;
     use HasSEO;
