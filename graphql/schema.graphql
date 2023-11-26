@@ -62,6 +62,8 @@ type Query {
 
         "Filters by author"
         hasAuthor: _ @whereHasConditions(columns: ["name", "id"])
+
+        where: _ @whereConditions(columns: ["title", "content", "category"])
     ): [Post] @paginate(defaultCount: 10)
 
     "Find a single post by an identifying attribute."
