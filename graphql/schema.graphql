@@ -64,7 +64,9 @@ type Query {
         hasAuthor: _ @whereHasConditions(columns: ["name", "id"])
 
         where: _ @whereConditions(columns: ["title", "content", "category"])
-    ): [Post] @paginate(defaultCount: 10)
+    ): [Post]
+        @paginate(defaultCount: 10)
+        @orderBy(column: "publish_at", direction: DESC)
 
     "Find a single post by an identifying attribute."
     post(

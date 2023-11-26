@@ -132,13 +132,14 @@ class PostResource extends Resource
         return $table
             ->columns([
                 //
-                TextColumn::make('id'),
+
                 TextColumn::make('title')->searchable()->sortable(),
                 TextColumn::make('categories.name')
                     ->listWithLineBreaks()->badge(),
                 SpatieMediaLibraryImageColumn::make('featuredImage')->square()->disk('s3')->visibility('public'),
                 TextColumn::make('author.name')->label('Author'),
-            ])
+                TextColumn::make('publish_at')->dateTime('d/m/Y')->sortable(),
+            ])->defaultSort('publish_at', 'desc')
             ->filters([
                 //
                 SelectFilter::make('categories')->relationship('categories', 'name')->multiple()->preload(),
