@@ -60,18 +60,24 @@ class EditorialMemberResource extends Resource
         return $table
             ->columns([
                 //
+                TextColumn::make('order')
+                    ->sortable(),
                 TextColumn::make('name')->searchable()->sortable(),
                 TextColumn::make('email')->searchable(),
                 TextColumn::make('position')->searchable(),
                 SpatieMediaLibraryImageColumn::make('profilePic')->collection('profile_pic')->square()->disk('s3')->visibility('public'),
 
-            ])
+            ])->defaultSort('order', 'asc')
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\Action::make('up')->icon('heroicon-o-chevron-up')
+                    ->action(fn (EditorialMember $record) => $record->moveOrderUp()),
+                Tables\Actions\Action::make('down')->icon('heroicon-o-chevron-down')
+                    ->action(fn (EditorialMember $record) => $record->moveOrderDown()),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

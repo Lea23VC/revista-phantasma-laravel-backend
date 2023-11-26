@@ -91,7 +91,9 @@ type Query {
     ): Category @find
 
     "List of all editorial members."
-    editorialMembers: [EditorialMember!]! @all
+    editorialMembers: [EditorialMember!]!
+        @all
+        @orderBy(column: "order", direction: ASC)
 
     "Find a single page"
     page(
