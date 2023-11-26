@@ -44,11 +44,12 @@ class PostResource extends Resource
                 'sm' => 2,
             ])
                 ->schema([
-                    Forms\Components\TextInput::make('title')->afterStateUpdated(function (Get $get, Set $set, ?string $state) {
-                        if (!$get('is_slug_changed_manually') && filled($state)) {
-                            $set('slug', Str::slug($state));
-                        }
-                    })->reactive()->required(),
+                    Forms\Components\TextInput::make('title')->live(onBlur: true)
+                        ->afterStateUpdated(function (Get $get, Set $set, ?string $state) {
+                            if (!$get('is_slug_changed_manually') && filled($state)) {
+                                $set('slug', Str::slug($state));
+                            }
+                        })->required(),
                     Forms\Components\TextInput::make('slug')
                         ->afterStateUpdated(function (Set $set) {
                             $set('is_slug_changed_manually', true);
