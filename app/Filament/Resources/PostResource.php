@@ -67,7 +67,7 @@ class PostResource extends Resource
                             Forms\Components\TextInput::make('name')
                                 ->required(),
                             Forms\Components\TextInput::make('url')
-                        ])
+                        ])->searchable()
                         ->preload()->required(),
 
                     TinyEditor::make('content')->showMenuBar()->language('es')->toolbarSticky(true)->columnSpan('full')->fileAttachmentsDisk('s3')->fileAttachmentsVisibility('public')->fileAttachmentsDirectory('posts_content')->maxWidth("740px")->required(),
