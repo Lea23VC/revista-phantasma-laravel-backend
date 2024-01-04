@@ -59,17 +59,17 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])->plugins([FilamentNavigation::make()->itemType('Posts', [
-                Select::make('post_id')
+                Select::make('select post')
                     ->searchable()
                     ->options(function () {
-                        return Post::pluck('title', 'id');
+                        return Post::pluck('title', 'slug');
                     }),
 
             ])->itemType('Categories', [
-                Select::make('category_id')
+                Select::make('select category')
                     ->searchable()
                     ->options(function () {
-                        return Category::pluck('name', 'id');
+                        return Category::pluck('name', 'slug');
                     }),
 
             ]), WebhookPlugin::make()]);

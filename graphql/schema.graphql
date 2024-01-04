@@ -19,6 +19,9 @@
 # import page definition
 #import ./types/page.schema.graphql
 
+# import navigation definition
+#import ./types/navigation.schema.graphql
+
 "A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
 scalar DateTime
     @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
@@ -108,6 +111,9 @@ type Query {
 
     "Find a single author"
     author("Search by primary key." id: ID @eq): Author @find
+
+    "Navigation for the header"
+    navigation: [Navigation]
 }
 
 "Account of a person who utilizes this application."
