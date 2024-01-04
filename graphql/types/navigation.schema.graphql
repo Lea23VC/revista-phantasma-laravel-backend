@@ -1,0 +1,10 @@
+type NavigationData {
+    slug: String
+}
+
+type Navigation {
+    label: String
+    type: String
+    data: NavigationData
+    children: [Navigation]
+}
