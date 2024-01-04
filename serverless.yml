@@ -61,6 +61,7 @@ provider:
         ASSET_URL: ${ssm:/revista_phantasma/prod/ASSET_URL}
         OWNER: ${ssm:/revista_phantasma/prod/OWNER}
         REPO_NAME: ${ssm:/revista_phantasma/prod/REPO_NAME}
+        FRONTEND_URL: ${ssm:/revista_phantasma/prod/FRONTEND_URL}
 
     iamRoleStatements:
                 - Effect: Allow
@@ -89,6 +90,7 @@ functions:
             - httpApi: '*'
         layers:
             - ${bref-extra:gd-php-81}
+        
        
         
 
