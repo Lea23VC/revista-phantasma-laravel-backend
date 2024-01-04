@@ -14,6 +14,8 @@ final readonly class Navigation
     {
         $menu = FilamentNavigation::fromHandle('main-menu');
 
+        Log::debug($menu->items);
+
         return $menu->items;
     }
 }
