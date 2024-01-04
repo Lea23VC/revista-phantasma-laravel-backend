@@ -36,6 +36,7 @@ class SitemapUrlListController extends Controller
 
         for ($i = 0; $i < count($postUrls); $i++) {
             $postUrls[$i] = env('FRONTEND_URL') . 'post/' . $postUrls[$i];
+            //
         }
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>';
