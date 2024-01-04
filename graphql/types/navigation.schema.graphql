@@ -5,6 +5,6 @@ type NavigationData {
 type Navigation {
     label: String
     type: String
-    data: NavigationData
+    data: NavigationData @field(resolver: "App\\GraphQL\\Queries\\Slug")
     children: [Navigation]
 }
