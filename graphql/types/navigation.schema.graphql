@@ -7,4 +7,7 @@ type Navigation {
     type: String
     data: NavigationData @field(resolver: "App\\GraphQL\\Queries\\Slug")
     children: [Navigation]
+        @field(
+            resolver: "App\\GraphQL\\Queries\\Navigation@resolveChildrenField"
+        )
 }

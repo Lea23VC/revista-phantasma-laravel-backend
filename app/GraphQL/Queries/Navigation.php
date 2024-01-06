@@ -17,4 +17,13 @@ final readonly class Navigation
 
         return $menu->items;
     }
+
+    public function resolveChildrenField($rootValue, $args)
+    {
+
+        $children = $rootValue["children"]; // Assuming $rootValue is a Navigation model instance
+
+        // Return null if children is an empty array
+        return count($children) > 0 ? $children : null;
+    }
 }
