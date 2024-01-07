@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Models\Category;
+use App\Models\Page;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -58,20 +59,31 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])->plugins([FilamentNavigation::make()->itemType('Posts', [
-                Select::make('slug')->label('Select Post')
-                    ->searchable()
-                    ->options(function () {
-                        return Post::pluck('title', 'slug');
-                    }),
+            ])->plugins([FilamentNavigation::make()
 
-            ])->itemType('Categories', [
-                Select::make('slug')->label('Select Category')
-                    ->searchable()
-                    ->options(function () {
-                        return Category::pluck('name', 'slug');
-                    }),
+                ->itemType('Pages', [
+                    Select::make('url')->label('Select Page')
+                        ->searchable()
+                        ->options(function () {
+                            return Page::pluck('title', 'slug');
+                        })
+                ])
+                ->itemType('Posts', [
 
-            ]), WebhookPlugin::make()]);
+                    Select::make('url')->label('Select Page')
+                        ->searchable()
+                        ->options(function () {
+                            return Page::pluck('title', 'slug');
+                        }),
+
+
+                ])->itemType('Categories', [
+                    Select::make('url')->label('Select Category')
+                        ->searchable()
+                        ->options(function () {
+                            return Category::pluck('name', 'slug');
+                        }),
+
+                ]), WebhookPlugin::make()]);
     }
 }

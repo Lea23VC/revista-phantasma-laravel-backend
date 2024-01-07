@@ -1,5 +1,5 @@
 type NavigationData {
-    slug: String
+    url: String
 }
 
 type Navigation {
