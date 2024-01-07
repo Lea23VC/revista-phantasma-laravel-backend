@@ -12,10 +12,13 @@ final readonly class Slug
     /** @param  array{}  $args */
     public function __invoke(mixed $root, array $args, GraphQLContext $context)
     {
-        if ($root['type'] == 'categories') {
-            $root['data']['slug'] = '/phantasma/' . $root['data']['slug'];
-        } else {
-            $root['data']['slug'] = '/' . $root['data']['slug'];
+        Log::info($root);
+        if (isset($root['data']['url'])) {
+            if ($root['type'] == 'categories') {
+                $root['data']['url'] = '/phantasma/' . $root['data']['url'];
+            } else {
+                $root['data']['url'] = '/' . $root['data']['url'];
+            }
         }
 
         return $root['data'];
