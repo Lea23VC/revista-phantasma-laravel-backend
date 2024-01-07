@@ -14,10 +14,14 @@ final readonly class Slug
     {
         Log::info($root);
         if (isset($root['data']['url'])) {
+
+
+
             if ($root['type'] == 'categories') {
                 $root['data']['url'] = '/phantasma/' . $root['data']['url'];
             } else {
-                $root['data']['url'] = '/' . $root['data']['url'];
+                if ($root['data']['url'] != '#')
+                    $root['data']['url'] = '/' . $root['data']['url'];
             }
         }
 
