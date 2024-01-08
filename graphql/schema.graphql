@@ -22,6 +22,9 @@
 # import navigation definition
 #import ./types/navigation.schema.graphql
 
+# import email response definition
+#import ./types/email.schema.graphql
+
 "A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
 scalar DateTime
     @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
@@ -114,6 +117,23 @@ type Query {
 
     "Navigation for the header"
     navigation: [Navigation]
+}
+
+type Mutation {
+    "Send Email"
+    sendEmail(
+        "The name of the person sending the email."
+        name: String! @rules(apply: ["required"])
+
+        "The email address to send the email to."
+        email: String! @rules(apply: ["email"])
+
+        "The subject of the email."
+        subject: String! @rules(apply: ["required"])
+
+        "The body of the email."
+        message: String! @rules(apply: ["required"])
+    ): EmailResponse
 }
 
 "Account of a person who utilizes this application."
