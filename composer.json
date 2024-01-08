@@ -31,7 +31,8 @@
         "ralphjsmit/laravel-filament-seo": "^1.2",
         "rickdbcn/filament-email": "^1.0",
         "ryangjchandler/filament-navigation": "*",
-        "spatie/eloquent-sortable": "^4.0"
+        "spatie/eloquent-sortable": "^4.0",
+        "spatie/laravel-permission": "^6.3"
     },
     "require-dev": {
         "doctrine/dbal": "^3.7",

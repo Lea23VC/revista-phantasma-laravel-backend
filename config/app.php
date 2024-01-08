@@ -177,6 +177,9 @@ return [
         /* Sortable behaviour for Eloquent models */
         Spatie\EloquentSortable\EloquentSortableServiceProvider::class,
 
+        /* Spatie Permission */
+        Spatie\Permission\PermissionServiceProvider::class,
+
     ])->toArray(),
 
     /*
