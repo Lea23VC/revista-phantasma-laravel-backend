@@ -128,9 +128,6 @@ type Mutation {
         "The email address to send the email to."
         email: String! @rules(apply: ["email"])
 
-        "The subject of the email."
-        subject: String! @rules(apply: ["required"])
-
         "The body of the email."
         message: String! @rules(apply: ["required"])
     ): EmailResponse
