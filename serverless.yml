@@ -163,8 +163,8 @@ plugins:
 #                 - "https://6bv7jhird5.execute-api.us-east-1.amazonaws.com"
 #                 - "https://d2nkzp12b3gige.cloudfront.net"
 #                 - "https://backend-revista-phantasma.revista_phantasma.xyz"
-# custom:
-#   warmup:
-#     studentHoursWarmer:
-#       enabled: true
-#       verbose: true
+custom:
+  warmup:
+    studentHoursWarmer:
+      enabled: true
+      verbose: true
