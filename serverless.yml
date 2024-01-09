@@ -97,7 +97,7 @@ functions:
             - ${bref-extra:gd-php-82}
 
         warmup:
-            default:
+            studentHoursWarmer:
                 enabled: false
         
        
