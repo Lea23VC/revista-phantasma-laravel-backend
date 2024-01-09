@@ -95,6 +95,10 @@ functions:
             - httpApi: '*'
         layers:
             - ${bref-extra:gd-php-82}
+
+        warmup:
+            default:
+                enabled: false
         
        
         
