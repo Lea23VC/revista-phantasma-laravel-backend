@@ -69,12 +69,11 @@ class EditorialMemberResource extends Resource
         return $table
             ->columns([
                 //
-                TextColumn::make('order')
-                    ->sortable(),
-                TextColumn::make('name')->searchable()->sortable(),
+
+                TextColumn::make('name')->label(__('Name'))->searchable()->sortable(),
                 TextColumn::make('email')->searchable(),
-                TextColumn::make('position')->searchable(),
-                SpatieMediaLibraryImageColumn::make('profilePic')->collection('profile_pic')->square()->disk('s3')->visibility('public'),
+                TextColumn::make('position')->label(__('Position'))->searchable(),
+                SpatieMediaLibraryImageColumn::make('profilePic')->label(__('Profile pic'))->collection('profile_pic')->square()->disk('s3')->visibility('public'),
 
             ])->defaultSort('order', 'asc')
             ->filters([

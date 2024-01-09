@@ -38,7 +38,7 @@ class CategoryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\TextInput::make('name')->label(__('Name'))
                     ->required()
                     ->afterStateUpdated(function (Get $get, Set $set, ?string $state) {
                         if (!$get('is_slug_changed_manually') && filled($state)) {
@@ -59,7 +59,7 @@ class CategoryResource extends Resource
                     ->dehydrated(false),
 
                 SpatieMediaLibraryFileUpload::make('background')
-                    ->label('Background')
+                    ->label(__('Background image'))
                     ->disk('s3')->visibility('public')->directory('category_backgrounds')
                     ->collection('backgrounds')->image()
                     ->responsiveImages()
