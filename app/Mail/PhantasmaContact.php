@@ -50,6 +50,7 @@ class PhantasmaContact extends Mailable
             with: [
                 'name' => $this->name,
                 'email' => $this->email,
+                'userMessage' => $this->message,
             ]
         );
     }
