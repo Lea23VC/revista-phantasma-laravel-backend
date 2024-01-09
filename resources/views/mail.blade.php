@@ -58,11 +58,9 @@
         </tr>
         <tr>
             <td class="email-body">
-                <p><strong>Nombre: </strong><br><br>{{ $name }}</p>
-                <br>
-                <p><strong>Email: </strong><br><br> {{ $email }}</p>
-                <br>
-                <p><strong>Mensaje: </strong><br><br>{{ $userMessage }}</p>
+                <p><strong>Nombre: </strong> {{ $name }}</p>
+                <p><strong>Email: </strong> {{ $email }}</p>
+                <p><strong>Mensaje: </strong><br>{{ $userMessage }}</p>
             </td>
         </tr>
         <tr>
