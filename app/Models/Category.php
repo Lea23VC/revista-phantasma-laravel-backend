@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Spatie\Image\Manipulations;
+
 use Spatie\Tags\HasTags;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
+use Spatie\Image\Enums\CropPosition;
 
 class Category extends Model implements HasMedia, Sortable
 {
@@ -34,8 +35,7 @@ class Category extends Model implements HasMedia, Sortable
     {
         $this
             ->addMediaConversion('preview')
-            ->fit(Manipulations::FIT_CROP, 300, 300)
-            ->nonQueued();
+            ->crop(400, 400, CropPosition::Center)->nonQueued();
     }
 
     public function background()

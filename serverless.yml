@@ -125,6 +125,7 @@ constructs:
             '/favicon.ico': public/favicon.ico
             '/robots.txt': public/robots.txt
             '/vendor/telescope/*': public/vendor/telescope
+            '/images/*': public/images
 
         domain: 'dashboard.phantasma.cl'
         certificate: 'arn:aws:acm:us-east-1:728906975086:certificate/341de4d5-14d3-426c-918e-48329073a03f'

@@ -11,11 +11,12 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Spatie\Image\Manipulations;
+
 
 use App\Casts\SpanishDateCast;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
 use Illuminate\Support\Str;
+use Spatie\Image\Enums\CropPosition;
 
 class Post extends Model  implements HasMedia
 {
@@ -49,7 +50,7 @@ class Post extends Model  implements HasMedia
     {
         $this
             ->addMediaConversion('preview')
-            ->fit(Manipulations::FIT_CROP, 300, 300)
+            ->crop(400, 400, CropPosition::Center)
             ->nonQueued();
     }
 

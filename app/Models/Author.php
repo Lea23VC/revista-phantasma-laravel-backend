@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Spatie\Image\Manipulations;
+use Spatie\Image\Enums\BorderType;
+use Spatie\Image\Enums\CropPosition;
+use Spatie\Image\Enums\Fit;
 use Spatie\Tags\HasTags;
 
 class Author extends Model  implements HasMedia
@@ -23,7 +25,7 @@ class Author extends Model  implements HasMedia
     {
         $this
             ->addMediaConversion('preview')
-            ->fit(Manipulations::FIT_CROP, 300, 300)
+            ->crop(400, 400, CropPosition::Center)
             ->nonQueued();
     }
 
