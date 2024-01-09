@@ -42,7 +42,7 @@ class AuthorResource extends Resource
             ->schema([
                 //
                 Forms\Components\TextInput::make('name')->label(__('Name'))->required(),
-                Forms\Components\TextInput::make('url'),
+                Forms\Components\TextInput::make('url')->label(__('URL')),
                 SpatieMediaLibraryFileUpload::make('profilePic')
                     ->label('Profile pic')->disk('s3')
                     ->visibility('public')->responsiveImages()
@@ -55,9 +55,9 @@ class AuthorResource extends Resource
         return $table
             ->columns([
                 //
-                TextColumn::make('name')->searchable()->sortable(),
+                TextColumn::make('name')->label(__('Name'))->searchable()->sortable(),
                 TextColumn::make('url')->searchable()->sortable(),
-                SpatieMediaLibraryImageColumn::make('profilePic')->square()->disk('s3')->visibility('public'),
+                SpatieMediaLibraryImageColumn::make('profilePic')->label(__('Profile pic'))->square()->disk('s3')->visibility('public'),
 
             ])
             ->filters([

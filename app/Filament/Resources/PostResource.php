@@ -54,7 +54,7 @@ class PostResource extends Resource
                 'sm' => 2,
             ])
                 ->schema([
-                    Forms\Components\TextInput::make('title')->live(onBlur: true)
+                    Forms\Components\TextInput::make('title')->label(__('Title'))->live(onBlur: true)
                         ->afterStateUpdated(function (Get $get, Set $set, ?string $state) {
                             if (!$get('is_slug_changed_manually') && filled($state)) {
                                 $set('slug', Str::slug($state));
@@ -69,9 +69,9 @@ class PostResource extends Resource
                         ->default(false)
                         ->dehydrated(false),
 
-                    DatePicker::make('publish_at')->native(false)->default(now()),
+                    DatePicker::make('publish_at')->label(__('Publish at'))->native(false)->default(now()),
 
-                    Select::make('author_id')
+                    Select::make('author_id')->label(__('Author'))
                         ->relationship(name: 'author', titleAttribute: 'name')
                         ->createOptionForm([
                             Forms\Components\TextInput::make('name')
@@ -80,13 +80,15 @@ class PostResource extends Resource
                         ])->searchable()
                         ->preload()->required(),
 
-                    TinyEditor::make('content')->showMenuBar()->language('es')->toolbarSticky(true)->columnSpan('full')->fileAttachmentsDisk('s3')->fileAttachmentsVisibility('public')->fileAttachmentsDirectory('posts_content')->maxWidth("740px")->required(),
+                    TinyEditor::make('content')->label(__('Content'))
+                        ->showMenuBar()->language('es')->toolbarSticky(true)->columnSpan('full')->fileAttachmentsDisk('s3')->fileAttachmentsVisibility('public')->fileAttachmentsDirectory('posts_content')->maxWidth("740px")->required(),
                     SpatieMediaLibraryFileUpload::make('featuredImage')
-                        ->label('Featured image')
+                        ->label(__('Featured image'))
                         ->disk('s3')->visibility('public')->directory('post_uploads')
                         ->image()->responsiveImages()
+                        ->maxSize(1024)
                         ->optimize('webp')->required(),
-                    Select::make('categories')->searchable()
+                    Select::make('categories')->label(__('Categories'))->searchable()
                         ->options(function () {
                             return Category::pluck('name', 'id');
                         })->multiple(true)->relationship('categories', 'name')->preload()->required(),
@@ -94,24 +96,24 @@ class PostResource extends Resource
                 ]),
         ]);
 
-        $attachmentsTab =  Tabs\Tab::make("Post attachments")->schema(
+        $attachmentsTab =  Tabs\Tab::make("Post attachments")->label(__('Post attachments'))->schema(
             [
 
 
-                Repeater::make('attachments')->label("Attachments files")->relationship('attachments')
+                Repeater::make('attachments')->label(__("Attachments files"))->relationship('attachments')
                     ->schema([
-                        TinyEditor::make('description')->label('Attachments description')
+                        TinyEditor::make('description')->label(__('Attachments description'))
                             ->showMenuBar()->language('es')->toolbarSticky(true)
                             ->columnSpan('full')->fileAttachmentsDisk('s3')
                             ->fileAttachmentsVisibility('public')
                             ->fileAttachmentsDirectory('description_attachments')
                             ->maxWidth("740px"),
-                        Select::make('position')
+                        Select::make('position')->label(__('Position'))
                             ->options([
-                                'start' => 'At the start of the post',
-                                'end' => 'At the end of the post',
+                                'start' => __('At the start of the post'),
+                                'end' => __('At the end of the post'),
                             ]),
-                        SpatieMediaLibraryFileUpload::make('attachment')
+                        SpatieMediaLibraryFileUpload::make('attachment')->label(__('Attachment file'))
                             ->collection('files')->disk('s3')
                             ->visibility('public')->reorderable(true)->preserveFilenames(true)
                             ->directory('post_attachments')->multiple(true),
@@ -139,20 +141,20 @@ class PostResource extends Resource
             ->columns([
                 //
 
-                TextColumn::make('title')->searchable()->sortable(),
-                TextColumn::make('categories.name')
+                TextColumn::make('title')->label(__('Title'))->searchable()->sortable(),
+                TextColumn::make('categories.name')->label(__('Categories'))
                     ->listWithLineBreaks()->badge(),
-                SpatieMediaLibraryImageColumn::make('featuredImage')->square()->disk('s3')->visibility('public'),
-                TextColumn::make('author.name')->label('Author'),
-                TextColumn::make('publish_at')->dateTime('d/m/Y')->sortable(),
+                SpatieMediaLibraryImageColumn::make('featuredImage')->label(__('Featured image'))->square()->disk('s3')->visibility('public'),
+                TextColumn::make('author.name')->label(__('Author')),
+                TextColumn::make('publish_at')->label(__('Publish at'))->sortable(),
             ])->defaultSort('publish_at', 'desc')
             ->filters([
                 //
-                SelectFilter::make('categories')->relationship('categories', 'name')->multiple()->preload(),
+                SelectFilter::make('categories')->label(__('Categories'))->relationship('categories', 'name')->multiple()->preload(),
 
             ])
             ->actions([
-                Action::make("Go to post")->url(fn (Post $record): string => 'https://revista-phantasma-nuxt-vue-frontend.vercel.app/post/' . $record->slug, true),
+                Action::make("Go to post")->label(__('Go to post'))->url(fn (Post $record): string => 'https://revista-phantasma-nuxt-vue-frontend.vercel.app/post/' . $record->slug, true),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

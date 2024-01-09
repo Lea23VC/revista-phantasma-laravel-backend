@@ -9,5 +9,18 @@
     "Authors": "Autores",
     "Categories": "Categorías",
     "Pages": "Páginas",
-    "Profile pic": "Foto de perfil"
+    "Profile pic": "Foto de perfil",
+    "Title": "Título",
+    "Publish at": "Publicado el",
+    "Author": "Autor",
+    "Content": "Contenido",
+    "Featured image": "Imagen destacada",
+    "Post attachments": "Adjuntos",
+    "Attachments files": "Archivos adjuntos",
+    "Attachments description": "Descripción de los archivos adjuntos",
+    "Position": "Posición",
+    "At the start of the post": "Al inicio del post",
+    "At the end of the post": "Al final del post",
+    "Attachment file": "Archivo adjunto",
+    "Go to post": "Ir al post"
 }
