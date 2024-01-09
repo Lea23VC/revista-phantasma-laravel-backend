@@ -34,7 +34,17 @@ class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-circle';
+
+
+    public static function getLabel(): ?string
+    {
+        return __('Posts');
+    }
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Magazine');
+    }
 
     public static function form(Form $form): Form
     {

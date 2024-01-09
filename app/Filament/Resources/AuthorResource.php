@@ -26,12 +26,22 @@ class AuthorResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function getLabel(): ?string
+    {
+        return __('Authors');
+    }
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Magazine');
+    }
+
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 //
-                Forms\Components\TextInput::make('name')->required(),
+                Forms\Components\TextInput::make('name')->label(__('Name'))->required(),
                 Forms\Components\TextInput::make('url'),
                 SpatieMediaLibraryFileUpload::make('profilePic')
                     ->label('Profile pic')->disk('s3')

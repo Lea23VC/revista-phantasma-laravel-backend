@@ -63,6 +63,7 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])->plugins([FilamentNavigation::make()
 
+
                 ->itemType('Pages', [
                     Select::make('url')->label('Select Page')
                         ->searchable()

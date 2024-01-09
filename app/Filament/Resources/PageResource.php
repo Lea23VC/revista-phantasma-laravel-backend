@@ -25,6 +25,13 @@ class PageResource extends Resource
         return __('Settings');
     }
 
+    public static function getLabel(): ?string
+    {
+        return __('Pages');
+    }
+
+
+
     public static function form(Form $form): Form
     {
         return $form

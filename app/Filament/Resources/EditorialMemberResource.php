@@ -25,6 +25,15 @@ class EditorialMemberResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function getLabel(): ?string
+    {
+        return __('Editorial Members');
+    }
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Magazine');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
