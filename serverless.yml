@@ -69,6 +69,11 @@ provider:
                     - s3:*
                   Resource: 
                     - "arn:aws:s3:::revista-phantasma-media/*"
+                - Effect: "Allow"
+                  Action:
+                    - "ses:SendEmail"
+                    - "ses:SendRawEmail"
+                  Resource: "*"
 
 package:
     # Files and directories to exclude from deployment
