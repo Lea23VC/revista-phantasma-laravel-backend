@@ -94,7 +94,7 @@ functions:
         events:
             - httpApi: '*'
         layers:
-            - ${bref-extra:gd-php-83}
+            - ${bref-extra:gd-php-82}
 
         warmup:
             studentHoursWarmer:
@@ -109,7 +109,7 @@ functions:
         runtime: php-83-console
         timeout: 720 # in seconds
         layers:
-            - ${bref-extra:gd-php-83}
+            - ${bref-extra:gd-php-82}
         # Uncomment to also run the scheduler every minute
         #events:
         #    - schedule:
@@ -136,7 +136,7 @@ constructs:
             runtime: php-83
             timeout: 60 # seconds
             layers:
-            - ${bref-extra:gd-php-83}
+            - ${bref-extra:gd-php-82}
 
 
 plugins:
