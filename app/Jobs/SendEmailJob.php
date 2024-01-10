@@ -41,7 +41,7 @@ class SendEmailJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to(['leandro.villalobos.dx@gmail.com'])->send(
+        Mail::to(['revistaphantasma@gmail.com'])->send(
             new PhantasmaContact(
                 $this->name,
                 $this->email,

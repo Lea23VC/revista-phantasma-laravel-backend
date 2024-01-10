@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\PostResource\Widgets\LatestPosts;
 use App\Models\Category;
 use App\Models\Page;
 use Filament\Http\Middleware\Authenticate;
@@ -45,8 +46,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\AccountWidget::class,
+                // Widgets\FilamentInfoWidget::class,
+                LatestPosts::class,
             ])
             ->middleware([
                 EncryptCookies::class,
