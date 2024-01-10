@@ -16,6 +16,7 @@ class SitemapUrlListController extends Controller
             env('FRONTEND_URL'),
             env('FRONTEND_URL') . 'contacto',
             env('FRONTEND_URL') . 'editorial',
+            env('FRONTEND_URL') . 'blog',
         ];
 
         $categories = Category::with(['posts', 'posts.author'])->get();
@@ -52,7 +53,7 @@ class SitemapUrlListController extends Controller
         $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
         // Add each URL to the XML
-        foreach (array_merge($baseUrls, $categoryUrls->toArray(), $postUrls->toArray()) as $url) {
+        foreach (array_merge($baseUrls, $categoryUrls->toArray(), $postUrls->toArray(), $authors->toArray()) as $url) {
             $xml .= '<url>';
             $xml .= '<loc>' . htmlspecialchars($url) . '</loc>';
             $xml .= '</url>';
