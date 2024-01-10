@@ -52,6 +52,10 @@ class Post extends Model  implements HasMedia
             ->addMediaConversion('preview')
             ->crop(400, 400, CropPosition::Center)
             ->nonQueued();
+
+        $this->addMediaConversion('featured')
+            ->width(1920)
+            ->nonQueued();
     }
 
     public function categories(): MorphToMany
