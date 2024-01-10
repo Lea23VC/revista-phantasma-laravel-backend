@@ -154,7 +154,7 @@ class PostResource extends Resource
 
             ])
             ->actions([
-                Action::make("Go to post")->label(__('Go to post'))->url(fn (Post $record): string => 'https://revista-phantasma-nuxt-vue-frontend.vercel.app/post/' . $record->slug, true),
+                Action::make("Go to post")->label(__('Go to post'))->url(fn (Post $record): string => env("FRONTEND_URL") . '/post/' . $record->slug, true),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
