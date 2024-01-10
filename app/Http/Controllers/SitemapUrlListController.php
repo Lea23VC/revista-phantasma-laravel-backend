@@ -14,13 +14,11 @@ class SitemapUrlListController extends Controller
 
         $baseUrls = [
             env('FRONTEND_URL'),
-            env('FRONTEND_URL') . 'phantasma',
-            env('FRONTEND_URL') . 'post',
             env('FRONTEND_URL') . 'contacto',
             env('FRONTEND_URL') . 'editorial',
         ];
 
-        $categories = Category::with('posts')->get();
+        $categories = Category::with(['posts', 'posts.author'])->get();
 
         $categoryUrls = $categories->pluck('slug');
 
@@ -33,6 +31,17 @@ class SitemapUrlListController extends Controller
                 return $category->posts->pluck('slug');
             }
         )->flatten();
+
+        $authors = $categories->map(
+            function ($category) {
+                return $category->posts->pluck('author.id');
+            }
+        )->flatten();
+
+
+        for ($i = 0; $i < count($authors); $i++) {
+            $authors[$i] = env('FRONTEND_URL') . 'author/' . $authors[$i];
+        }
 
         for ($i = 0; $i < count($postUrls); $i++) {
             $postUrls[$i] = env('FRONTEND_URL') . 'post/' . $postUrls[$i];

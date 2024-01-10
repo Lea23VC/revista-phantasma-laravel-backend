@@ -86,7 +86,7 @@ class PostResource extends Resource
                         ->label(__('Featured image'))
                         ->disk('s3')->visibility('public')->directory('post_uploads')
                         ->image()->responsiveImages()
-                        ->maxSize(1024)
+                        // ->maxSize(1024)
                         ->optimize('webp')->required(),
                     Select::make('categories')->label(__('Categories'))->searchable()
                         ->options(function () {
