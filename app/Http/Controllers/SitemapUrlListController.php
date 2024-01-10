@@ -41,7 +41,7 @@ class SitemapUrlListController extends Controller
 
 
         for ($i = 0; $i < count($authors); $i++) {
-            $authors[$i] = env('FRONTEND_URL') . 'author/' . $authors[$i];
+            $authors[$i] = env('FRONTEND_URL') . 'phantasma/autor/' . $authors[$i];
         }
 
         for ($i = 0; $i < count($postUrls); $i++) {
