@@ -16,7 +16,7 @@ class SitemapUrlListController extends Controller
             env('FRONTEND_URL'),
             env('FRONTEND_URL') . 'contacto',
             env('FRONTEND_URL') . 'editorial',
-            env('FRONTEND_URL') . 'blog',
+            env('FRONTEND_URL') . 'phantasma/blog',
         ];
 
         $categories = Category::with(['posts', 'posts.author'])->get();
