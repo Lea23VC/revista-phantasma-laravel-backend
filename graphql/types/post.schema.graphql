@@ -9,4 +9,5 @@ type Post {
     featured_image: Media @method(name: "featuredImage")
     author: Author @belongsTo
     categories: [Category] @morphMany
+    content_images: [String]
 }

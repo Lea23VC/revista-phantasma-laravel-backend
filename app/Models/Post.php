@@ -14,6 +14,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
 use App\Casts\SpanishDateCast;
+use DOMDocument;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
 use Illuminate\Support\Str;
 use Spatie\Image\Enums\CropPosition;
@@ -73,5 +74,21 @@ class Post extends Model  implements HasMedia
         $cleanContent = strip_tags($this->content);
         $cleanContent = str_replace("\n", "", $cleanContent); // Remove newline characters
         return Str::limit($cleanContent, 150);
+    }
+
+    public function getContentImagesAttribute()
+    {
+        $dom = new DOMDocument();
+        @$dom->loadHTML($this->content); // Suppress warnings from invalid HTML
+        $imageUrls = [];
+
+        foreach ($dom->getElementsByTagName('img') as $img) {
+            $url = $img->getAttribute('src');
+            if (substr($url, -4) !== '.zip') { // Exclude if the URL ends with .zip
+                $imageUrls[] = $url;
+            }
+        }
+
+        return $imageUrls;
     }
 }
