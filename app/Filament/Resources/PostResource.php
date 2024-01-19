@@ -22,11 +22,13 @@ use Filament\Forms\Get;
 use Filament\Forms\Components\Tabs;
 
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\ToggleButtons;
 
 use Filament\Forms\Set;
 use Illuminate\Support\Str;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\Toggle;
 
 use RalphJSmit\Filament\SEO\SEO;
 
@@ -59,18 +61,13 @@ class PostResource extends Resource
                             if (!$get('is_slug_changed_manually') && filled($state)) {
                                 $set('slug', Str::slug($state));
                             }
-                        })->required(),
+                        })->required()->columnSpan('full'),
+
                     Forms\Components\TextInput::make('slug')
                         ->afterStateUpdated(function (Set $set) {
                             $set('is_slug_changed_manually', true);
                         })->unique(ignorable: fn ($record) => $record)
                         ->required(),
-                    Forms\Components\Hidden::make('is_slug_changed_manually')
-                        ->default(false)
-                        ->dehydrated(false),
-
-                    DatePicker::make('publish_at')->label(__('Publish at'))->native(false)->default(now()),
-
                     Select::make('author_id')->label(__('Author'))
                         ->relationship(name: 'author', titleAttribute: 'name')
                         ->createOptionForm([
@@ -79,6 +76,16 @@ class PostResource extends Resource
                             Forms\Components\TextInput::make('url')
                         ])->searchable()
                         ->preload()->required(),
+                    Forms\Components\Hidden::make('is_slug_changed_manually')
+                        ->default(false)
+                        ->dehydrated(false),
+
+                    DatePicker::make('publish_at')->label(__('Publish at'))->native(false)->default(now()),
+
+                    ToggleButtons::make('is_published')->label(__('Published?'))
+                        ->boolean()
+                        ->inline()
+                        ->default(true),
 
                     TinyEditor::make('content')->label(__('Content'))
                         ->showMenuBar()->language('es')->toolbarSticky(true)->columnSpan('full')->fileAttachmentsDisk('s3')->fileAttachmentsVisibility('public')->fileAttachmentsDirectory('posts_content')->maxWidth("740px")->required(),
