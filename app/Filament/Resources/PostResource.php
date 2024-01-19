@@ -145,7 +145,7 @@ class PostResource extends Resource
                 TextColumn::make('title')->label(__('Title'))->searchable()->sortable(),
                 TextColumn::make('categories.name')->label(__('Categories'))
                     ->listWithLineBreaks()->badge(),
-                SpatieMediaLibraryImageColumn::make('featuredImage')->label(__('Featured image'))->square()->disk('s3')->visibility('public'),
+                SpatieMediaLibraryImageColumn::make('featuredImage')->label(__('Featured image'))->square()->disk('s3')->visibility('public')->conversion('preview'),
                 TextColumn::make('author.name')->label(__('Author')),
                 TextColumn::make('publish_at')->label(__('Publish at'))->sortable(),
             ])->defaultSort('publish_at', 'desc')
