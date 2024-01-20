@@ -14,7 +14,8 @@ class EditPost extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make("Go to post")->url(fn (Post $record): string => env("FRONTEND_URL") . 'post/' . $record->slug, true),
+            Actions\Action::make("Go to post")->label(__("Go to post"))
+                ->url(fn (Post $record): string => env("FRONTEND_URL") . 'post/' . $record->slug, true),
             Actions\DeleteAction::make(),
         ];
     }
