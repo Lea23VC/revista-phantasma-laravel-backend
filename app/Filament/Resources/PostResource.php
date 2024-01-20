@@ -16,6 +16,7 @@ use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Tables\Enums\ActionsPosition;
 
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
@@ -180,9 +181,11 @@ class PostResource extends Resource
 
             ])
             ->actions([
-                Action::make("Go to post")->label(__('Go to post'))->url(fn (Post $record): string => env("FRONTEND_URL") . 'post/' . $record->slug, true),
+                Action::make("Go to post")->label(__('Go to post'))
+                    ->hidden(fn (Post $record): bool => !$record->is_published)
+                    ->url(fn (Post $record): string => env("FRONTEND_URL") . 'post/' . $record->slug, true),
                 Tables\Actions\EditAction::make(),
-            ])
+            ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
