@@ -41,8 +41,8 @@ jobs:
 
       - name: Create Service Account JSON
         run: |
-          mkdir -p storage/app/analytics
-          echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS }}' > storage/app/analytics/service-account-credentials.json
+          mkdir -p app/Credentials/Analytics
+          echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS }}' > app/Credentials/Analytics/service-account-credentials.json
 
       # This step deploys your application to AWS Lambda using the Serverless Framework.
       - name: Deploy to AWS Lambda
