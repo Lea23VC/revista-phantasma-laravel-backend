@@ -4,7 +4,7 @@ type Post {
     slug: String!
     content: String!
     content_without_html: String
-    publish_at: String!
+    publish_at: String! @method(name: "getSpanishDateAttribute")
     attachments: [Attachment] @hasMany
     featured_image: Media @method(name: "featuredImage")
     author: Author @belongsTo

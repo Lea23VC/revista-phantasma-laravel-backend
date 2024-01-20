@@ -73,6 +73,7 @@ type Query {
     ): [Post]
         @paginate(defaultCount: 10)
         @orderBy(column: "publish_at", direction: DESC)
+        @where(key: "is_published", operator: "=", value: true)
 
     "Find a single post by an identifying attribute."
     post(

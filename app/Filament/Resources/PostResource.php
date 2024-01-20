@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources;
 
+use Illuminate\Support\Carbon;
+use Filament\Tables\Columns\IconColumn;
+
 use App\Filament\Resources\PostResource\Pages;
 use App\Models\Category;
 use App\Models\Post;
@@ -29,6 +32,7 @@ use Illuminate\Support\Str;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Toggle;
+
 
 use RalphJSmit\Filament\SEO\SEO;
 
@@ -80,7 +84,9 @@ class PostResource extends Resource
                         ->default(false)
                         ->dehydrated(false),
 
-                    DatePicker::make('publish_at')->label(__('Publish at'))->native(false)->default(now()),
+                    DatePicker::make('publish_at')->label(__('Publish at'))
+                        ->format('Y-m-d')
+                        ->native(false)->default(now()),
 
                     ToggleButtons::make('is_published')->label(__('Published?'))
                         ->boolean()
@@ -149,12 +155,24 @@ class PostResource extends Resource
             ->columns([
                 //
 
-                TextColumn::make('title')->label(__('Title'))->searchable()->sortable(),
+                TextColumn::make('title')->label(__('Title'))
+                    ->tooltip(fn (Post $record): string => strlen($record->title) > 60 ? $record->title : '')
+                    ->formatStateUsing(function (string $state) {
+                        return strlen($state) > 60 ? substr($state, 0, 60) . '...' : $state;
+                    })->searchable()->sortable(),
                 TextColumn::make('categories.name')->label(__('Categories'))
                     ->listWithLineBreaks()->badge(),
+                IconColumn::make('is_published')->label(__('Published?'))
+                    ->boolean()
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->trueColor('success')
+                    ->falseColor('warning')
+                    ->falseIcon('heroicon-o-pencil'),
                 SpatieMediaLibraryImageColumn::make('featuredImage')->label(__('Featured image'))->square()->disk('s3')->visibility('public')->conversion('preview'),
                 TextColumn::make('author.name')->label(__('Author')),
-                TextColumn::make('publish_at')->label(__('Publish at'))->sortable(),
+                TextColumn::make('publish_at')->label(__('Publish at'))
+                    ->dateTime('d/m/Y')
+                    ->sortable(),
             ])->defaultSort('publish_at', 'desc')
             ->filters([
                 //

@@ -27,12 +27,13 @@ class Post extends Model  implements HasMedia
         'content',
         'publish_at',
         'author_id',
+        'is_published',
     ];
 
     protected $casts = [
         'categories' => 'array',
         'attachments' => 'array',
-        'publish_at'  => SpanishDateCast::class
+        'is_published' => 'boolean',
     ];
 
     use HasFactory;
@@ -43,6 +44,7 @@ class Post extends Model  implements HasMedia
     {
         return $this->belongsTo(Author::class);
     }
+
     public function featuredImage()
     {
         return $this->getMedia("default")->first();
@@ -90,5 +92,18 @@ class Post extends Model  implements HasMedia
         }
 
         return $imageUrls;
+    }
+
+    public function getSpanishDateAttribute()
+    { // Check if the attribute exists in the model
+        if (!isset($this->attributes['publish_at'])) {
+            return null;
+        }
+
+        $value = $this->attributes['publish_at'];
+        $spanishDateCast = new SpanishDateCast();
+
+        // Use the 'get' method of the cast to format the date
+        return $spanishDateCast->get($this, 'publish_at', $value, $this->attributes);
     }
 }
