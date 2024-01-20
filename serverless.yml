@@ -62,6 +62,7 @@ provider:
         OWNER: ${ssm:/revista_phantasma/prod/OWNER}
         REPO_NAME: ${ssm:/revista_phantasma/prod/REPO_NAME}
         FRONTEND_URL: ${ssm:/revista_phantasma/prod/FRONTEND_URL}
+        ANALYTICS_PROPERTY_ID: ${ssm:/revista_phantasma/prod/ANALYTICS_PROPERTY_ID}
 
     iamRoleStatements:
                 - Effect: Allow
