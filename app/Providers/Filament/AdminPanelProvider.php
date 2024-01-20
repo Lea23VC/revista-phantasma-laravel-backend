@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\GoogleAnalytics;
 use App\Filament\Resources\PostResource\Widgets\LatestPosts;
 use App\Models\Category;
 use App\Models\Page;
@@ -43,12 +44,24 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
+                GoogleAnalytics::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
                 LatestPosts::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\PageViewsWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\VisitorsWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\ActiveUsersOneDayWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\ActiveUsersSevenDayWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\ActiveUsersTwentyEightDayWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\SessionsWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\SessionsDurationWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\SessionsByCountryWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\SessionsByDeviceWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\MostVisitedPagesWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\TopReferrersListWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
