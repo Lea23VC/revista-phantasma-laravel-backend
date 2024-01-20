@@ -178,7 +178,14 @@ class PostResource extends Resource
             ->filters([
                 //
                 SelectFilter::make('categories')->label(__('Categories'))->relationship('categories', 'name')->multiple()->preload(),
+                SelectFilter::make('is_published')->label(__('Published?'))
+                    ->options(
+                        [
+                            true => __('Yes'),
+                            false => __('No'),
 
+                        ]
+                    )
             ])
             ->actions([
                 Action::make("Go to post")->label(__('Go to post'))
