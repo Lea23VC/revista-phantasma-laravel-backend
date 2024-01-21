@@ -23,7 +23,7 @@ class GoogleAnalytics extends Page
             Widgets\SessionsDurationWidget::class,
             Widgets\SessionsByCountryWidget::class,
             Widgets\SessionsByDeviceWidget::class,
-            // Widgets\MostVisitedPagesWidget::class,
+            Widgets\MostVisitedPagesWidget::class,
             Widgets\TopReferrersListWidget::class,
         ];
     }
