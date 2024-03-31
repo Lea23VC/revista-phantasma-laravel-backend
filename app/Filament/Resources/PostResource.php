@@ -7,6 +7,7 @@ use Filament\Tables\Columns\IconColumn;
 
 use App\Filament\Resources\PostResource\Pages;
 use App\Forms\Components\ImagePosition;
+use App\Forms\Components\ImagePositionPreview;
 use App\Models\Category;
 use App\Models\Post;
 use Filament\Forms;
@@ -32,6 +33,7 @@ use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Set;
 use Illuminate\Support\Str;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Section;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Toggle;
 
@@ -100,17 +102,103 @@ class PostResource extends Resource
                     SpatieMediaLibraryFileUpload::make('featuredImage')
                         ->label(__('Featured image'))
                         ->disk('s3')->visibility('public')->directory('post_uploads')
-                        ->image()->responsiveImages()
+                        ->image()
+                        ->responsiveImages()
                         ->conversion('featured')
                         // ->maxSize(1024)
                         ->optimize('webp')->required(),
-
-                    ImagePosition::make('imagePosition')->label(__('Image position'))
-                        ->required(),
                     Select::make('categories')->label(__('Categories'))->searchable()
                         ->options(function () {
                             return Category::pluck('name', 'id');
                         })->multiple(true)->relationship('categories', 'name')->preload()->required(),
+
+
+                    Section::make('Image position')->columns(1)
+                        ->reactive()
+                        ->schema([
+                            Select::make('imagePosition')
+                                ->hidden(fn (Post $record): bool => !$record?->featuredImage())
+                                ->afterStateUpdated(function (Get $get, Set $set, Post $record, ?string $state) {
+
+                                    $position = "center";
+
+                                    switch ($get("imagePosition")) {
+                                        case 'left':
+                                            $position = 'left';
+                                            break;
+                                        case 'right':
+                                            $position = 'right';
+                                            break;
+                                        case 'center':
+                                            $position = 'center';
+                                            break;
+
+                                        case 'top':
+                                            $position = 'top';
+                                            break;
+
+                                        case 'bottom':
+
+                                            $position = 'bottom';
+                                            break;
+
+                                        case 'left-top':
+                                            $position = 'left-top';
+                                            break;
+
+                                        case 'right-top':
+                                            $position = 'right-top';
+                                            break;
+
+                                        case 'left-bottom':
+                                            $position = 'left-bottom';
+                                            break;
+
+                                        case 'right-bottom':
+
+                                            $position = 'right-bottom';
+                                            break;
+
+                                        default:
+                                            $position = 'center';
+                                            break;
+                                    }
+
+                                    $data = [
+                                        'imagePosition' => $position,
+                                        'featuredImage' =>
+                                        $record?->featuredImage()->getUrl('preview'),
+                                    ];
+
+                                    $set('imagePositionPreview', $data);
+                                })
+                                ->reactive()
+                                ->options([
+                                    'left' => __('Left'),
+                                    'right' => __('Right'),
+                                    'center' => __('Center'),
+                                    'top' => __('Top'),
+                                    'bottom' => __('Bottom'),
+                                    'left-top' => __('Left top'),
+                                    'right-top' => __('Right top'),
+                                    'left-bottom' => __('Left bottom'),
+                                    'right-bottom' => __('Right bottom'),
+
+                                ])
+                                ->default('center')
+                                ->label(__('Image position'))
+                                ->required(),
+                            ImagePositionPreview::make("imagePositionPreview")
+                                ->label(__('Image position preview'))
+                                ->formatStateUsing(function (Get $get, Set $set, Post $record) {
+                                    return [
+                                        'imagePosition' => 'center',
+                                        'featuredImage' =>
+                                        $record->featuredImage()->getUrl('preview'),
+                                    ];
+                                })->reactive()
+
+                        ]),
 
                 ]),
         ]);

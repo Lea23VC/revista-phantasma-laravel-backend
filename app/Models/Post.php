@@ -19,7 +19,7 @@ use RalphJSmit\Laravel\SEO\Support\HasSEO;
 use Illuminate\Support\Str;
 use Spatie\Image\Enums\CropPosition;
 
-class Post extends Model  implements HasMedia
+class Post extends Model implements HasMedia
 {
     protected $fillable = [
         'title',
@@ -45,7 +45,7 @@ class Post extends Model  implements HasMedia
         return $this->belongsTo(Author::class);
     }
 
-    public function featuredImage()
+    public function featuredImage(): Media
     {
         return $this->getMedia("default")->first();
     }
@@ -53,7 +53,7 @@ class Post extends Model  implements HasMedia
     {
         $this
             ->addMediaConversion('preview')
-            ->crop(400, 400, CropPosition::Center)
+            ->width(400)
             ->nonQueued();
 
         $this->addMediaConversion('featured')
