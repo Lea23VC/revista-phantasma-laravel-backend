@@ -6,6 +6,7 @@ use Illuminate\Support\Carbon;
 use Filament\Tables\Columns\IconColumn;
 
 use App\Filament\Resources\PostResource\Pages;
+use App\Forms\Components\ImagePosition;
 use App\Models\Category;
 use App\Models\Post;
 use Filament\Forms;
@@ -103,6 +104,9 @@ class PostResource extends Resource
                         ->conversion('featured')
                         // ->maxSize(1024)
                         ->optimize('webp')->required(),
+
+                    ImagePosition::make('imagePosition')->label(__('Image position'))
+                        ->required(),
                     Select::make('categories')->label(__('Categories'))->searchable()
                         ->options(function () {
                             return Category::pluck('name', 'id');
