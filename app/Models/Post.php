@@ -53,7 +53,7 @@ class Post extends Model implements HasMedia
     {
         $this
             ->addMediaConversion('preview')
-            ->width(400)
+            ->width(500)
             ->nonQueued();
 
         $this->addMediaConversion('featured')
