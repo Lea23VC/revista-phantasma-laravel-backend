@@ -63,6 +63,7 @@ provider:
         REPO_NAME: ${ssm:/revista_phantasma/prod/REPO_NAME}
         FRONTEND_URL: ${ssm:/revista_phantasma/prod/FRONTEND_URL}
         ANALYTICS_PROPERTY_ID: ${ssm:/revista_phantasma/prod/ANALYTICS_PROPERTY_ID}
+        DYNAMODB_CACHE_TABLE: !Ref CacheTable
 
     iamRoleStatements:
                 - Effect: Allow
@@ -75,6 +76,17 @@ provider:
                     - "ses:SendEmail"
                     - "ses:SendRawEmail"
                   Resource: "*"
+                - Effect: Allow
+                  Resource: !GetAtt CacheTable.Arn
+                  Action:
+                      - dynamodb:DescribeTable
+                      - dynamodb:Query
+                      - dynamodb:Scan
+                      - dynamodb:GetItem
+                      - dynamodb:PutItem
+                      - dynamodb:UpdateItem
+                      - dynamodb:DeleteItem
+                
 
 package:
     # Files and directories to exclude from deployment
@@ -150,6 +162,22 @@ plugins:
   - ./vendor/bref/extra-php-extensions
   - serverless-plugin-warmup
 
+
+resources:
+    Resources:
+        CacheTable:
+            Type: AWS::DynamoDB::Table
+            Properties:
+                AttributeDefinitions: # only keys are defined here, other attributes are dynamic
+                    -   AttributeName: id # adds a mandatory id field
+                        AttributeType: S # the type of id is a string
+                BillingMode: PAY_PER_REQUEST # billed for each request instead of paying for a constant capacity
+                TimeToLiveSpecification: # deletes cache keys automatically based on a ttl field which contains a timestamp
+                    AttributeName: ttl
+                    Enabled: true
+                KeySchema:
+                    -   AttributeName: id
+                        KeyType: HASH # the
 
 # resources:
 #   Resources:
