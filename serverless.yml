@@ -28,7 +28,6 @@ provider:
         FILESYSTEM_DISK: ${ssm:/revista_phantasma/prod/FILESYSTEM_DISK}
         SESSION_DRIVER: ${ssm:/revista_phantasma/prod/SESSION_DRIVER}
         SESSION_LIFETIME: ${ssm:/revista_phantasma/prod/SESSION_LIFETIME}
-        MEMCACHED_HOST: ${ssm:/revista_phantasma/prod/MEMCACHED_HOST}
         REDIS_HOST: ${ssm:/revista_phantasma/prod/REDIS_HOST}
         REDIS_PASSWORD: ${ssm:/revista_phantasma/prod/REDIS_PASSWORD}
         REDIS_PORT: ${ssm:/revista_phantasma/prod/REDIS_PORT}
