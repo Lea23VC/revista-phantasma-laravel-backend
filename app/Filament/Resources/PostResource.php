@@ -102,6 +102,7 @@ class PostResource extends Resource
                     TinyEditor::make('content')->label(__('Content'))
                         ->showMenuBar()->language('es')->toolbarSticky(true)->columnSpan('full')->fileAttachmentsDisk('s3')->fileAttachmentsVisibility('public')->fileAttachmentsDirectory('posts_content')->maxWidth("740px")->required(),
                     SpatieMediaLibraryFileUpload::make('featuredImage')
+                        ->downloadable()
                         ->customProperties(fn (Get $get): array => [
                             'preview-position' => $get('previewImagePosition') ?? 'center',
                             'banner-position' => $get('bannerImagePosition') ?? 'center',
@@ -302,6 +303,7 @@ class PostResource extends Resource
                                 'end' => __('At the end of the post'),
                             ]),
                         SpatieMediaLibraryFileUpload::make('attachment')->label(__('Attachment file'))
+                            ->downloadable()
                             ->collection('files')->disk('s3')
                             ->visibility('public')->reorderable(true)->preserveFilenames(true)
                             ->directory('post_attachments')->multiple(true),
