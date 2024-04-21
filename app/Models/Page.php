@@ -13,6 +13,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Page extends Model implements HasMedia
 {
     use HasFactory;
+    protected $with = ['media'];
     protected $fillable = ['title', 'slug', 'content'];
 
     use InteractsWithMedia;

@@ -36,6 +36,8 @@ class Post extends Model implements HasMedia
         'is_published' => 'boolean',
     ];
 
+    protected $with = ['media'];
+
     use HasFactory;
     use InteractsWithMedia;
     use HasSEO;
