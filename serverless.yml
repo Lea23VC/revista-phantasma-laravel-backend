@@ -2,6 +2,7 @@ service: revista-phantasma-backend
 
 provider:
     name: aws
+    memorySize: 2048
     # The AWS region in which to deploy (us-east-1 is the default)
     region: us-east-1
     # Environment variables
