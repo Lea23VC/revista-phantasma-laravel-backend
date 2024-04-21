@@ -45,9 +45,9 @@ class Post extends Model implements HasMedia
         return $this->belongsTo(Author::class);
     }
 
-    public function featuredImage(): Media
+    public function featuredImage(): ?Media
     {
-        return $this->getMedia("default")->first();
+        return $this->getMedia("default")?->first();
     }
     public function registerMediaConversions(Media $media = null): void
     {

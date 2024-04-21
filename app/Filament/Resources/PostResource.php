@@ -2,12 +2,12 @@
 
 namespace App\Filament\Resources;
 
+use App\Actions\GetPostFeatureImageUrlAction;
 use Illuminate\Support\Carbon;
 use Filament\Tables\Columns\IconColumn;
 
 use App\Filament\Resources\PostResource\Pages;
-use App\Forms\Components\ImagePosition;
-use App\Forms\Components\ImagePositionPreview;
+use App\Forms\Components\ImagePositionField;
 use App\Models\Category;
 use App\Models\Post;
 use Filament\Forms;
@@ -37,6 +37,8 @@ use Filament\Forms\Components\Section;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Toggle;
 
+use Log;
+use Storage;
 
 use RalphJSmit\Filament\SEO\SEO;
 
@@ -100,105 +102,184 @@ class PostResource extends Resource
                     TinyEditor::make('content')->label(__('Content'))
                         ->showMenuBar()->language('es')->toolbarSticky(true)->columnSpan('full')->fileAttachmentsDisk('s3')->fileAttachmentsVisibility('public')->fileAttachmentsDirectory('posts_content')->maxWidth("740px")->required(),
                     SpatieMediaLibraryFileUpload::make('featuredImage')
+                        ->customProperties(fn (Get $get): array => [
+                            'preview-position' => $get('previewImagePosition') ?? 'center',
+                            'banner-position' => $get('bannerImagePosition') ?? 'center',
+                        ])
+                        ->reactive()
                         ->label(__('Featured image'))
                         ->disk('s3')->visibility('public')->directory('post_uploads')
                         ->image()
                         ->responsiveImages()
                         ->conversion('featured')
                         // ->maxSize(1024)
-                        ->optimize('webp')->required(),
+                        ->optimize('webp')
+                        ->required(),
                     Select::make('categories')->label(__('Categories'))->searchable()
                         ->options(function () {
                             return Category::pluck('name', 'id');
                         })->multiple(true)->relationship('categories', 'name')->preload()->required(),
 
 
-                    Section::make('Image position')->columns(1)
+                    Grid::make([
+                        'default' => 1,
+                        'sm' => 2,
+                        'md' => 3,
+                        'lg' => 4,
+                        'xl' => 6,
+                        '2xl' => 8,
+                    ])
+
                         ->reactive()
+                        ->hidden(function (Get $get, Set $set, ?Post $record) {
+                            $temporaryFile = $get('featuredImage');
+                            if (!$temporaryFile) {
+                                return true;
+                            }
+                            $url = GetPostFeatureImageUrlAction::run($temporaryFile, $record);
+                            $previewPosition = $get("previewImagePosition") ?? 'center';
+                            $data = [
+                                'type' => 'preview',
+                                'imagePosition' => $previewPosition,
+                                'featuredImage' =>
+                                $url,
+                            ];
+                            $bannerPosition = $get("bannerImagePosition") ?? 'center';
+                            $data2 = [
+                                'type' => 'banner',
+                                'imagePosition' => $bannerPosition,
+                                'featuredImage' =>
+                                $url,
+                            ];
+                            $set('positionPreview', $data);
+                            $set('bannerPreview', $data2);
+                            return !$get('featuredImage');
+                        })
                         ->schema([
-                            Select::make('imagePosition')
-                                ->hidden(fn (Post $record): bool => !$record?->featuredImage())
-                                ->afterStateUpdated(function (Get $get, Set $set, Post $record, ?string $state) {
-
-                                    $position = "center";
-
-                                    switch ($get("imagePosition")) {
-                                        case 'left':
-                                            $position = 'left';
-                                            break;
-                                        case 'right':
-                                            $position = 'right';
-                                            break;
-                                        case 'center':
-                                            $position = 'center';
-                                            break;
-
-                                        case 'top':
-                                            $position = 'top';
-                                            break;
-
-                                        case 'bottom':
-
-                                            $position = 'bottom';
-                                            break;
-
-                                        case 'left-top':
-                                            $position = 'left-top';
-                                            break;
-
-                                        case 'right-top':
-                                            $position = 'right-top';
-                                            break;
-
-                                        case 'left-bottom':
-                                            $position = 'left-bottom';
-                                            break;
-
-                                        case 'right-bottom':
-
-                                            $position = 'right-bottom';
-                                            break;
-
-                                        default:
-                                            $position = 'center';
-                                            break;
-                                    }
-
-                                    $data = [
-                                        'imagePosition' => $position,
-                                        'featuredImage' =>
-                                        $record?->featuredImage()->getUrl('preview'),
-                                    ];
-
-                                    $set('imagePositionPreview', $data);
-                                })
+                            Section::make(__("Thumbnail Position"))
                                 ->reactive()
-                                ->options([
-                                    'left' => __('Left'),
-                                    'right' => __('Right'),
-                                    'center' => __('Center'),
-                                    'top' => __('Top'),
-                                    'bottom' => __('Bottom'),
-                                    'left-top' => __('Left top'),
-                                    'right-top' => __('Right top'),
-                                    'left-bottom' => __('Left bottom'),
-                                    'right-bottom' => __('Right bottom'),
+                                ->columnSpan(4)->schema([
 
+                                    Select::make('previewImagePosition')
+                                        ->hidden(false)
+                                        ->afterStateHydrated(function (Get $get, Set $set, ?Post $record) {
+                                            $position =  $record?->featuredImage()?->getCustomProperty('preview-position');
+                                            $set('previewImagePosition', $position);
+                                        })
+                                        ->afterStateUpdated(function (Get $get, Set $set, ?Post $record, ?string $state) {
+                                            $temporaryFile = $get('featuredImage');
+                                            if ($temporaryFile) {
+                                                $url = GetPostFeatureImageUrlAction::run($temporaryFile, $record);
+                                                $position = $get("previewImagePosition") ?? 'center';
+
+                                                $data = [
+                                                    'type' => 'preview',
+                                                    'imagePosition' => $position,
+                                                    'featuredImage' =>
+                                                    $url,
+                                                ];
+
+                                                $set('positionPreview', $data);
+                                            }
+                                        })
+                                        ->reactive()
+                                        ->options([
+                                            'left' => __('Left'),
+                                            'right' => __('Right'),
+                                            'center' => __('Center'),
+                                            'top' => __('Top'),
+                                            'bottom' => __('Bottom'),
+                                            'left-top' => __('Left top'),
+                                            'right-top' => __('Right top'),
+                                            'left-bottom' => __('Left bottom'),
+                                            'right-bottom' => __('Right bottom'),
+
+                                        ])
+                                        ->default('center')
+                                        ->label(__('Image position')),
+                                    ImagePositionField::make("positionPreview")
+                                        ->label(__('Preview'))
+                                        ->hidden(fn (Get $get) => !$get('featuredImage'))
+                                        ->formatStateUsing(function (Get $get, Set $set, ?Post $record) {
+                                            $temporaryFile = $get('featuredImage');
+                                            $url = null;
+
+                                            if ($temporaryFile) {
+                                                $url = GetPostFeatureImageUrlAction::run($temporaryFile, $record);
+                                            }
+
+                                            return [
+                                                'imagePosition' => 'center',
+                                                'featuredImage' =>
+                                                $url,
+                                            ];
+                                        })
+                                        ->reactive()
+                                ]),
+                            Section::make(__("Banner Position"))
+                                ->columnSpan(4)
+                                ->reactive()->schema([
+                                    Select::make('bannerImagePosition')
+                                        ->hidden(false)
+                                        ->afterStateHydrated(function (Get $get, Set $set, ?Post $record) {
+                                            $position =  $record?->featuredImage()?->getCustomProperty('banner-position');
+                                            $set('bannerImagePosition', $position);
+                                        })
+                                        ->afterStateUpdated(function (Get $get, Set $set, ?Post $record, ?string $state) {
+                                            $temporaryFile = $get('featuredImage');
+                                            if ($temporaryFile) {
+                                                $url = GetPostFeatureImageUrlAction::run($temporaryFile, $record);
+                                                $position = $get("bannerImagePosition") ?? 'center';
+
+                                                $data = [
+                                                    'type' => 'banner',
+                                                    'imagePosition' => $position,
+                                                    'featuredImage' =>
+                                                    $url,
+                                                ];
+
+                                                $set('bannerPreview', $data);
+                                            }
+                                        })
+                                        ->reactive()
+                                        ->options([
+                                            'left' => __('Left'),
+                                            'right' => __('Right'),
+                                            'center' => __('Center'),
+                                            'top' => __('Top'),
+                                            'bottom' => __('Bottom'),
+                                            'left-top' => __('Left top'),
+                                            'right-top' => __('Right top'),
+                                            'left-bottom' => __('Left bottom'),
+                                            'right-bottom' => __('Right bottom'),
+
+                                        ])
+                                        ->default('center')
+                                        ->label(__('Image position')),
+                                    ImagePositionField::make("bannerPreview")
+                                        ->label(__('Preview'))
+                                        ->hidden(fn (Get $get) => !$get('featuredImage'))
+                                        ->formatStateUsing(function (Get $get, Set $set, ?Post $record) {
+                                            $temporaryFile = $get('featuredImage');
+                                            $url = null;
+
+                                            if ($temporaryFile) {
+                                                $url = GetPostFeatureImageUrlAction::run($temporaryFile, $record);
+                                            }
+
+                                            return [
+                                                'type' => 'banner',
+                                                'imagePosition' => 'center',
+                                                'featuredImage' =>
+                                                $url,
+                                            ];
+                                        })
+                                        ->reactive()
                                 ])
-                                ->default('center')
-                                ->label(__('Image position'))
-                                ->required(),
-                            ImagePositionPreview::make("imagePositionPreview")
-                                ->label(__('Image position preview'))
-                                ->formatStateUsing(function (Get $get, Set $set, Post $record) {
-                                    return [
-                                        'imagePosition' => 'center',
-                                        'featuredImage' =>
-                                        $record->featuredImage()->getUrl('preview'),
-                                    ];
-                                })->reactive()
+
 
                         ]),
+
 
                 ]),
         ]);
