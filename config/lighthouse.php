@@ -92,8 +92,7 @@ return [
         /*
          * Setting to true enables schema caching.
          */
-        // 'enable' => env('LIGHTHOUSE_SCHEMA_CACHE_ENABLE', env('APP_ENV') !== 'local'),
-        'enable' => false,
+        'enable' => env('LIGHTHOUSE_SCHEMA_CACHE_ENABLE', env('APP_ENV') !== 'local'),
 
         /*
          * File path to store the lighthouse schema.
