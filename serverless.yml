@@ -2,6 +2,7 @@ service: revista-phantasma-backend
 
 provider:
     name: aws
+    memorySize: 2048
     # The AWS region in which to deploy (us-east-1 is the default)
     region: us-east-1
     # Environment variables
@@ -28,7 +29,6 @@ provider:
         FILESYSTEM_DISK: ${ssm:/revista_phantasma/prod/FILESYSTEM_DISK}
         SESSION_DRIVER: ${ssm:/revista_phantasma/prod/SESSION_DRIVER}
         SESSION_LIFETIME: ${ssm:/revista_phantasma/prod/SESSION_LIFETIME}
-        MEMCACHED_HOST: ${ssm:/revista_phantasma/prod/MEMCACHED_HOST}
         REDIS_HOST: ${ssm:/revista_phantasma/prod/REDIS_HOST}
         REDIS_PASSWORD: ${ssm:/revista_phantasma/prod/REDIS_PASSWORD}
         REDIS_PORT: ${ssm:/revista_phantasma/prod/REDIS_PORT}
@@ -63,6 +63,7 @@ provider:
         REPO_NAME: ${ssm:/revista_phantasma/prod/REPO_NAME}
         FRONTEND_URL: ${ssm:/revista_phantasma/prod/FRONTEND_URL}
         ANALYTICS_PROPERTY_ID: ${ssm:/revista_phantasma/prod/ANALYTICS_PROPERTY_ID}
+        DYNAMODB_CACHE_TABLE: !Ref CacheTable
 
     iamRoleStatements:
                 - Effect: Allow
@@ -75,6 +76,17 @@ provider:
                     - "ses:SendEmail"
                     - "ses:SendRawEmail"
                   Resource: "*"
+                - Effect: Allow
+                  Resource: !GetAtt CacheTable.Arn
+                  Action:
+                      - dynamodb:DescribeTable
+                      - dynamodb:Query
+                      - dynamodb:Scan
+                      - dynamodb:GetItem
+                      - dynamodb:PutItem
+                      - dynamodb:UpdateItem
+                      - dynamodb:DeleteItem
+                
 
 package:
     # Files and directories to exclude from deployment
@@ -150,6 +162,22 @@ plugins:
   - ./vendor/bref/extra-php-extensions
   - serverless-plugin-warmup
 
+
+resources:
+    Resources:
+        CacheTable:
+            Type: AWS::DynamoDB::Table
+            Properties:
+                AttributeDefinitions: # only keys are defined here, other attributes are dynamic
+                    -   AttributeName: id # adds a mandatory id field
+                        AttributeType: S # the type of id is a string
+                BillingMode: PAY_PER_REQUEST # billed for each request instead of paying for a constant capacity
+                TimeToLiveSpecification: # deletes cache keys automatically based on a ttl field which contains a timestamp
+                    AttributeName: ttl
+                    Enabled: true
+                KeySchema:
+                    -   AttributeName: id
+                        KeyType: HASH # the
 
 # resources:
 #   Resources:

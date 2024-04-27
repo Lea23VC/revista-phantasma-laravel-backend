@@ -19,4 +19,21 @@ class EditPost extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function afterValidate(): void
+    {
+        $post = $this->record;
+
+        $data = $this->data;
+        $featuredImage = $post?->featuredImage();
+        if ($featuredImage && isset($data['previewImagePosition'])) {
+
+            $featuredImage->setCustomProperty('preview-position', $data['previewImagePosition']);
+        }
+
+        if (isset($data['bannerImagePosition'])) {
+            $featuredImage->setCustomProperty('banner-position', $data['bannerImagePosition']);
+        }
+        $featuredImage?->save();
+    }
 }

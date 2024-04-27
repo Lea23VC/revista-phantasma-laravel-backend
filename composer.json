@@ -24,6 +24,7 @@
         "laravel/telescope": "^4.16",
         "laravel/tinker": "^2.8",
         "league/flysystem-aws-s3-v3": "^3.16",
+        "lorisleiva/laravel-actions": "^2.8",
         "marjose123/filament-webhook-server": "^2.0",
         "mll-lab/graphql-php-scalars": "^6.2",
         "mll-lab/laravel-graphiql": "^3.1",

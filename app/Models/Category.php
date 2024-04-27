@@ -24,6 +24,8 @@ class Category extends Model implements HasMedia, Sortable
     use HasFactory;
 
 
+    protected $with = ['media'];
+
     protected $fillable = ['name', 'slug'];
 
     public function posts(): MorphToMany

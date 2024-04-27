@@ -43,6 +43,7 @@ class PageResource extends Resource
                     ->required()
                     ->maxLength(255),
                 SpatieMediaLibraryFileUpload::make('backgroundImage')
+                    ->downloadable()
                     ->label('Background image')
                     ->disk('s3')->visibility('public')
                     ->directory('pages_background_images')

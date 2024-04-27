@@ -16,6 +16,13 @@ type Media {
     updated_at: String!
     original_url: String!
     preview_url: String!
+    positions: ImagePosition
+        @field(resolver: "App\\GraphQL\\Queries\\ImagePosition")
+}
+
+type ImagePosition {
+    preview: String
+    banner: String
 }
 
 type ResponsiveImage {

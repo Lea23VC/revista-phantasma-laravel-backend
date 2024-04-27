@@ -92,7 +92,6 @@ return [
         /*
          * Setting to true enables schema caching.
          */
-        // 'enable' => env('LIGHTHOUSE_SCHEMA_CACHE_ENABLE', env('APP_ENV') !== 'local'),
         'enable' => false,
 
         /*

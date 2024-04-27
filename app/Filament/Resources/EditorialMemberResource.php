@@ -50,6 +50,7 @@ class EditorialMemberResource extends Resource
                     ->required(),
 
                 SpatieMediaLibraryFileUpload::make('profilePic')
+                    ->downloadable()
                     ->label('Profile pic')->disk('s3')
                     ->visibility('public')
                     ->directory('editorial_members_profile_pic')
