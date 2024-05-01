@@ -102,6 +102,6 @@ class AdminPanelProvider extends PanelProvider
                             return Category::pluck('name', 'slug');
                         }),
 
-                ]), WebhookPlugin::make(), new \RickDBCN\FilamentEmail\FilamentEmail()]);
+                ]), new \RickDBCN\FilamentEmail\FilamentEmail()]);
     }
 }

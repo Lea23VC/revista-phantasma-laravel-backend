@@ -1,0 +1,21 @@
+name: Deploy to staging
+on:
+  push:
+    branches:
+      - feature/vapor
+jobs:
+  vapor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Service Account JSON
+        run: |
+          mkdir -p app/Credentials/Analytics
+          echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS }}' > app/Credentials/Analytics/service-account-credentials.json
+
+      - uses: actions/checkout@master
+      - name: Deploy to staging
+        env:
+          VAPOR_API_TOKEN: ${{ secrets.VAPOR_API_TOKEN }}
+        uses: teamnovu/vapor-action@master
+        with:
+          args: deploy production

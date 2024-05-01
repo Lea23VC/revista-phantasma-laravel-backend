@@ -1,0 +1,11 @@
+id: 60904
+name: revista-phantasma-backend
+environments:
+    production:
+        memory: 1024
+        cli-memory: 512
+        runtime: 'php-8.3:al2'
+        build:
+            - 'composer install --no-dev'
+            - 'php artisan event:cache'
+            - 'yarn install --frozen-lockfile && yarn build && rm -rf node_modules'
