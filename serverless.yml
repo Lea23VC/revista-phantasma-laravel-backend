@@ -112,7 +112,7 @@ functions:
 
         warmup:
             studentHoursWarmer:
-                enabled: false
+                enabled: true
         
        
         
