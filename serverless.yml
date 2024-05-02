@@ -106,13 +106,15 @@ functions:
         timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
         events:
             - httpApi: '*'
+            - schedule:
+                rate: rate(5 minutes)
+                input:
+                    warmer: true
         layers:
             - ${bref-extra:gd-php-82}
             - ${bref-extra:gmp-php-82}
 
-        warmup:
-            studentHoursWarmer:
-                enabled: true
+        
         
        
         
@@ -200,8 +202,4 @@ resources:
 #                 - "https://6bv7jhird5.execute-api.us-east-1.amazonaws.com"
 #                 - "https://d2nkzp12b3gige.cloudfront.net"
 #                 - "https://backend-revista-phantasma.revista_phantasma.xyz"
-custom:
-  warmup:
-    studentHoursWarmer:
-      enabled: true
-      verbose: true
+
