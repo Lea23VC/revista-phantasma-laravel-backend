@@ -128,10 +128,10 @@ functions:
             - ${bref-extra:gd-php-83}
             - ${bref-extra:gmp-php-83}
         # Uncomment to also run the scheduler every minute
-        #events:
-        #    - schedule:
-        #          rate: rate(1 minute)
-        #          input: '"schedule:run"'
+        events:
+           - schedule:
+                 rate: rate(1 minute)
+                 input: '"schedule:run"'
 
 constructs:
     website:
