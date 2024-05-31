@@ -89,12 +89,15 @@ return [
     */
 
     'schema_cache' => [
-        'enable' => false,
+        /*
+         * Setting to true enables schema caching.
+         */
+        'enable' => true,
 
         /*
          * File path to store the lighthouse schema.
          */
-        'path' => env('LIGHTHOUSE_SCHEMA_CACHE_PATH', base_path('bootstrap/cache/lighthouse-schema.php')),
+        'path' => env('LIGHTHOUSE_SCHEMA_CACHE_PATH', '/tmp/storage/bootstrap/cache/lighthouse-schema.php'),
     ],
 
     /*
