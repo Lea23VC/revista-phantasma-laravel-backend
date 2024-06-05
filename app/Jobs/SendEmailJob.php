@@ -43,9 +43,9 @@ class SendEmailJob implements ShouldQueue
     public function handle(): void
     {
 
-        # Get all emails from EditorialMembers
+        # Get all emails from EditorialMembers, only if they have receive_emails set to true
+        $emails = EditorialMember::where('receive_emails', true)->pluck('email')->toArray();
 
-        $emails = EditorialMember::all()->pluck('email')->toArray();
 
         # Merge it with config('mail.from.address')
         $emails[] = config('mail.from.address');

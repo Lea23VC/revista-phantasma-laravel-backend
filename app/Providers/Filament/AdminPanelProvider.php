@@ -24,6 +24,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use RyanChandler\FilamentNavigation\FilamentNavigation;
 use Filament\Forms\Components\Select;
 use App\Models\Post;
+use Filament\Enums\ThemeMode;
 use Marjose123\FilamentWebhookServer\WebhookPlugin;
 
 class AdminPanelProvider extends PanelProvider
@@ -33,6 +34,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->brandLogo(asset('images/phantasma_white.png'))
             ->brandLogoHeight('40px')
+            ->defaultThemeMode(ThemeMode::Dark)
             ->default()
             ->id('admin')
             ->path('')
