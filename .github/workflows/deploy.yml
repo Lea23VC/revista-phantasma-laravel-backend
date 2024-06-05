@@ -44,12 +44,6 @@ jobs:
           mkdir -p app/Credentials/Analytics
           echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS }}' > app/Credentials/Analytics/service-account-credentials.json
 
-      # Run migrations
-      - name: Run Migrations
-        uses: serverless/github-action@v3
-        with:
-          args: serverless bref:cli --args="php artisan migrate"
-
       # This step deploys your application to AWS Lambda using the Serverless Framework.
       - name: Deploy to AWS Lambda
         uses: serverless/github-action@v3
