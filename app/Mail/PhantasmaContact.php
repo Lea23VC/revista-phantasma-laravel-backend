@@ -39,7 +39,7 @@ class PhantasmaContact extends Mailable
         return new Envelope(
             subject: 'Nuevo mensaje de contacto',
             replyTo: $this->email,
-            to: new Address(
+            from: new Address(
                 address: config('mail.from.address'),
                 name: $this->name
             )
