@@ -1,38 +1,31 @@
-name: Production Deployment
 on:
-  push:
-    branches:
-      - test
+  workflow_call:
+    inputs:
+      platforms:
+        type: string
+        default: "linux/amd64"
+      docker-tags:
+        required: true
+        type: string
+      dockerfile:
+        type: string
+        default: "./Dockerfile"
+      target:
+        type: string
+        default: ""
+      environment:
+        type: string
+        required: true
 
-########################################################################
-# 🚨 WARNING: You must set the following secrets in GitHub:
-#
-# - DEPLOYMENT_SSH_PRIVATE_KEY
-# - DEPLOYMENT_SSH_HOSTNAME
-# - DB_ROOT_PASSWORD
-# - DB_NAME
-# - DB_USERNAME
-# - DB_PASSWORD
-# - ENV_FILE_BASE64
-#
-# Ensure these secrets match the environment you're deploying to.
-# https://github.com/<your-organization>/<your-repo>/settings/environments
-########################################################################
-
-# 👇 Set these variables to match your application needs. Most of them should work great by default.
 env:
-  DEPLOYMENT_URL_HOSTNAME: test.phantasma.cl
-  DEPLOYMENT_URL: https://test.phantasma.cl
+  DOCKER_COMPOSE_CMD: docker compose -f docker-compose.yml -f docker-compose.ci.yml
 
 jobs:
-  build:
+  docker-publish:
     runs-on: ubuntu-22.04
+    environment:
+      name: ${{ inputs.environment }}
     steps:
-      - name: Set lowercase tags
-        run: |
-          echo "DOCKER_TAG=$(echo ghcr.io/${{ github.repository }}:${{ github.ref_name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-          echo "DOCKER_TAG_LATEST=$(echo ghcr.io/${{ github.repository }}:latest | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -47,19 +40,32 @@ jobs:
         name: List the composer packages
         continue-on-error: true
         run: |
-          $DOCKER_COMPOSE_CMD run php composer show --locked
+          $DOCKER_COMPOSE_CMD \
+          run \
+          php \
+          composer show --locked
 
       - if: ${{ steps.composer-vendor-restore.outputs.cache-hit != 'true' }}
         name: Install Composer dependencies
         run: |
-          $DOCKER_COMPOSE_CMD run php composer install --optimize-autoloader --no-interaction --no-progress --no-ansi
+          $DOCKER_COMPOSE_CMD \
+          run \
+          php \
+          composer install --optimize-autoloader --no-interaction --no-progress --no-ansi
+
+      - name: Set env file
+        run: |
+          echo $BASE_64_SECRET | base64 -d > .env
+          chmod 600 .env
+        env:
+          BASE_64_SECRET: ${{ secrets.ENV_FILE_BASE64 }}
 
       - name: docker-build-action
         uses: serversideup/github-action-docker-build@v5
         with:
           tags: |
-            ${{ env.DOCKER_TAG }}
-            ${{ env.DOCKER_TAG_LATEST }}
+            ghcr.io/Lea23VC/revista-phantasma-laravel-backend:feat-install-spin
+            ghcr.io/Lea23VC/revista-phantasma-laravel-backend:latest
           dockerfile: "${{ inputs.dockerfile }}"
           registry: "ghcr.io"
           registry-username: "${{ github.actor }}"
@@ -67,31 +73,7 @@ jobs:
           platforms: "${{ inputs.platforms }}"
           target: "${{ inputs.target }}"
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-22.04
-    environment:
-      name: production # 👈 Make sure you created this environment in GitHub with the secrets above.
-      url: "${{ env.DEPLOYMENT_URL }}"
-    steps:
-      - name: Get project name from repository name.
+      - name: Normalize Docker tags
         run: |
-          echo "PROJECT_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
-
-      - uses: serversideup/github-action-docker-swarm-deploy@v1
-        with:
-          # 👇 Ensure these are correct and that you've set the appropriate secrets.
-          deployment_ssh_private_key: "${{ secrets.DEPLOYMENT_SSH_PRIVATE_KEY }}"
-          remote_ssh_server_hostname: "${{ secrets.DEPLOYMENT_SSH_HOSTNAME }}"
-          registry: "ghcr.io"
-          registry-username: "${{ github.actor }}"
-          registry-token: "${{ secrets.GITHUB_TOKEN }}"
-          stack_name: "${{ env.PROJECT_NAME }}"
-        env:
-          # 👇 Ensure this makes sense for your application.
-          TRAEFIK_HOST_RULE: "Host(`${{ env.DEPLOYMENT_URL_HOSTNAME }}`)"
-          DB_ROOT_PASSWORD: "${{ secrets.DB_ROOT_PASSWORD }}"
-          DB_NAME: "${{ secrets.DB_NAME }}"
-          DB_USERNAME: "${{ secrets.DB_USERNAME }}"
-          DB_PASSWORD: "${{ secrets.DB_PASSWORD }}"
-          DEPLOYMENT_IMAGE_PHP: "ghcr.io/${{ github.repository }}:${{ github.ref_name }}" | tr '[:upper:]' '[:lower:]'
+          DOCKER_TAGS=$(echo "ghcr.io/${{ github.repository }}:${{ github.ref_name }}" | tr '[:upper:]' '[:lower:]')
+          echo "DOCKER_TAGS=$DOCKER_TAGS" >> $GITHUB_ENV
