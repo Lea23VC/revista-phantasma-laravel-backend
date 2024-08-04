@@ -60,16 +60,10 @@ jobs:
         env:
           BASE_64_SECRET: ${{ secrets.ENV_FILE_BASE64 }}
 
-      - name: Lowercase repository and ref name
-        id: lowercase
-        run: |
-          echo "REPO_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-          echo "REF_NAME=$(echo ${{ github.ref_name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-
       - name: docker-build-action
         uses: serversideup/github-action-docker-build@v5
         with:
-          tags: "${{ env.REPO_NAME }}:${{ env.REF_NAME }},${{ env.REPO_NAME }}:latest"
+          tags: "xd"
           dockerfile: "${{ inputs.dockerfile }}"
           registry: "ghcr.io"
           registry-username: "${{ github.actor }}"
