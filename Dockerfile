@@ -8,7 +8,11 @@ FROM serversideup/php:beta-8.3-fpm-nginx as base
 
 ## Uncomment if you need to install additional PHP extensions
 USER root
-RUN install-php-extensions bcmath gd intl exif
+RUN install-php-extensions intl exif gd bcmath
+
+# Set user and group for PHP-FPM
+RUN echo "user = www-data" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf && \
+    echo "group = www-data" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf
 
 ############################################
 # Development Image
@@ -36,8 +40,6 @@ FROM base as ci
 # so we set the ROOT user and configure
 # the PHP-FPM pool to run as www-data
 USER root
-RUN echo "user = www-data" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf && \
-    echo "group = www-data" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf
 
 ############################################
 # Production Image
