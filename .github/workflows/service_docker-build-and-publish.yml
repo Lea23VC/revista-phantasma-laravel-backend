@@ -60,10 +60,14 @@ jobs:
         env:
           BASE_64_SECRET: ${{ secrets.ENV_FILE_BASE64 }}
 
+      - name: Convert docker-tags to lowercase
+        id: convert-tags
+        run: echo "DOCKER_TAGS=$(echo '${{ inputs.docker-tags }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
       - name: docker-build-action
         uses: serversideup/github-action-docker-build@v5
         with:
-          tags: "xd"
+          tags: "${{ env.DOCKER_TAGS }}"
           dockerfile: "${{ inputs.dockerfile }}"
           registry: "ghcr.io"
           registry-username: "${{ github.actor }}"
