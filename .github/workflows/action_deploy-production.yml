@@ -26,12 +26,46 @@ env:
 
 jobs:
   build:
-    uses: ./.github/workflows/service_docker-build-and-publish.yml
-    with:
-      # 👇 Ensure these are the tags you want to publish to your registry.
-      docker-tags: ghcr.io/${{ github.repository }}:${{ github.ref_name }},ghcr.io/${{ github.repository }}:latest
-      environment: production # 👈 Make sure you created this environment in GitHub with the secrets above.
-    secrets: inherit
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Set lowercase tags
+        run: |
+          echo "DOCKER_TAG=$(echo ghcr.io/${{ github.repository }}:${{ github.ref_name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          echo "DOCKER_TAG_LATEST=$(echo ghcr.io/${{ github.repository }}:latest | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore composer cache (if available)
+        id: composer-vendor-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: vendor/
+          key: ${{ runner.os }}-composer-vendor-${{ hashFiles('composer.lock') }}
+
+      - if: ${{ steps.composer-vendor-restore.outputs.cache-hit != 'true' }}
+        name: List the composer packages
+        continue-on-error: true
+        run: |
+          $DOCKER_COMPOSE_CMD run php composer show --locked
+
+      - if: ${{ steps.composer-vendor-restore.outputs.cache-hit != 'true' }}
+        name: Install Composer dependencies
+        run: |
+          $DOCKER_COMPOSE_CMD run php composer install --optimize-autoloader --no-interaction --no-progress --no-ansi
+
+      - name: docker-build-action
+        uses: serversideup/github-action-docker-build@v5
+        with:
+          tags: |
+            ${{ env.DOCKER_TAG }}
+            ${{ env.DOCKER_TAG_LATEST }}
+          dockerfile: "${{ inputs.dockerfile }}"
+          registry: "ghcr.io"
+          registry-username: "${{ github.actor }}"
+          registry-token: "${{ secrets.GITHUB_TOKEN }}"
+          platforms: "${{ inputs.platforms }}"
+          target: "${{ inputs.target }}"
 
   deploy:
     needs: build
@@ -60,4 +94,4 @@ jobs:
           DB_NAME: "${{ secrets.DB_NAME }}"
           DB_USERNAME: "${{ secrets.DB_USERNAME }}"
           DB_PASSWORD: "${{ secrets.DB_PASSWORD }}"
-          DEPLOYMENT_IMAGE_PHP: "ghcr.io/${{ github.repository }}:${{ github.ref_name }}"
+          DEPLOYMENT_IMAGE_PHP: "ghcr.io/${{ github.repository }}:${{ github.ref_name }}" | tr '[:upper:]' '[:lower:]'
