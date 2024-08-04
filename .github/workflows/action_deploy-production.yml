@@ -21,8 +21,8 @@ on:
 
 # 👇 Set these variables to match your application needs. Most of them should work great by default.
 env:
-  DEPLOYMENT_URL_HOSTNAME: dashboard.phantasma.cl
-  DEPLOYMENT_URL: https://dashboard.phantasma.cl
+  DEPLOYMENT_URL_HOSTNAME: test.dashboard.phantasma.cl
+  DEPLOYMENT_URL: https://test.dashboard.phantasma.cl
 
 jobs:
   build:
@@ -32,7 +32,7 @@ jobs:
       docker-tags: ghcr.io/${{ github.repository }}:${{ github.ref_name }},ghcr.io/${{ github.repository }}:latest
       environment: production # 👈 Make sure you created this environment in GitHub with the secrets above.
     secrets: inherit
-  
+
   deploy:
     needs: build
     runs-on: ubuntu-22.04
@@ -40,9 +40,8 @@ jobs:
       name: production # 👈 Make sure you created this environment in GitHub with the secrets above.
       url: "${{ env.DEPLOYMENT_URL }}"
     steps:
-
       - name: Get project name from repository name.
-        run: | 
+        run: |
           echo "PROJECT_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
 
       - uses: serversideup/github-action-docker-swarm-deploy@v1
