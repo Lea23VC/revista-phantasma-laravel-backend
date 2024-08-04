@@ -23,3 +23,4 @@ programmatic-types.graphql
 schema-directives.graphql
 
 app/Credentials/Analytics/service-account-credentials.json
+.vault-password
