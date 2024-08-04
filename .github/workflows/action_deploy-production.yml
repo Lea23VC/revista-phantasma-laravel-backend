@@ -57,7 +57,7 @@ jobs:
           registry: "ghcr.io"
           registry-username: "${{ github.actor }}"
           registry-token: "${{ secrets.GITHUB_TOKEN }}"
-          stack_name: "${{ env.PROJECT_NAME }}"
+          stack_name: "phantasma"
         env:
           # 👇 Ensure this makes sense for your application.
           TRAEFIK_HOST_RULE: "Host(`${{ env.DEPLOYMENT_URL_HOSTNAME }}`)"
