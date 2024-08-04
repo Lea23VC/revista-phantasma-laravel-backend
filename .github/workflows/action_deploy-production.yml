@@ -26,18 +26,12 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Set lowercased environment variables
-        run: |
-          echo "REPO_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-          echo "REF_NAME=$(echo ${{ github.ref_name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-      - name: Build and publish Docker image
-        uses: ./.github/workflows/service_docker-build-and-publish.yml
-        with:
-          # 👇 Ensure these are the tags you want to publish to your registry.
-          docker-tags: ghcr.io/${{ env.REPO_NAME }}:${{ env.REF_NAME }},ghcr.io/${{ env.REPO_NAME }}:latest
-          environment: production # 👈 Make sure you created this environment in GitHub with the secrets above.
+    uses: ./.github/workflows/service_docker-build-and-publish.yml
+    with:
+      # 👇 Ensure these are the tags you want to publish to your registry.
+      docker-tags: ghcr.io/${{ github.repository }}:${{ github.ref_name }},ghcr.io/${{ github.repository }}:latest
+      environment: production # 👈 Make sure you created this environment in GitHub with the secrets above.
+    secrets: inherit
 
   deploy:
     needs: build
@@ -47,8 +41,13 @@ jobs:
       url: "${{ env.DEPLOYMENT_URL }}"
     steps:
       - name: Get project name from repository name.
+        run: echo "PROJECT_NAME=${GITHUB_REPOSITORY#*/}" | tr '[:upper:]' '[:lower:]' >> $GITHUB_ENV
+
+      - name: Lowercase repository and ref name
+        id: lowercase
         run: |
-          echo "PROJECT_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+          echo "REPO_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          echo "REF_NAME=$(echo ${{ github.ref_name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       - uses: serversideup/github-action-docker-swarm-deploy@v1
         with:
