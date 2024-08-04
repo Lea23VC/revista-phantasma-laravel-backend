@@ -73,7 +73,7 @@ jobs:
           platforms: "${{ inputs.platforms }}"
           target: "${{ inputs.target }}"
 
-      - name: Normalize Docker tags
+      - name: Normalize Docker tags a
         run: |
           DOCKER_TAGS=$(echo "ghcr.io/${{ github.repository }}:${{ github.ref_name }}" | tr '[:upper:]' '[:lower:]')
           echo "DOCKER_TAGS=$DOCKER_TAGS" >> $GITHUB_ENV
