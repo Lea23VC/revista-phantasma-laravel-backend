@@ -1,8 +1,8 @@
 name: Production Deployment
 on:
-  release:
-    types:
-      - released
+  push:
+    branches:
+      - "test"
 
 ########################################################################
 # 🚨 WARNING: You must set the following secrets in GitHub:
