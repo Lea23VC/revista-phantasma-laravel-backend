@@ -49,6 +49,12 @@ jobs:
           echo "REPO_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
           echo "REF_NAME=$(echo ${{ github.ref_name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
+      # Debug step to print out secrets (Use with caution)
+      - name: Debug secrets
+        run: |
+          echo "DEPLOYMENT_SSH_HOSTNAME: ${{ secrets.DEPLOYMENT_SSH_HOSTNAME }}"
+          echo "DEPLOYMENT_SSH_PRIVATE_KEY: ${{ secrets.DEPLOYMENT_SSH_PRIVATE_KEY }}"
+
       - uses: serversideup/github-action-docker-swarm-deploy@v1
         with:
           # 👇 Ensure these are correct and that you've set the appropriate secrets.
