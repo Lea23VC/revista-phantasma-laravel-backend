@@ -1,8 +1,8 @@
 name: Production Deployment
 on:
-  release:
-    types:
-      - released
+  push:
+    branches:
+      - feat/install-spin
 
 ########################################################################
 # 🚨 WARNING: You must set the following secrets in GitHub:
@@ -21,8 +21,8 @@ on:
 
 # 👇 Set these variables to match your application needs. Most of them should work great by default.
 env:
-  DEPLOYMENT_URL_HOSTNAME: test.dashboard.phantasma.cl
-  DEPLOYMENT_URL: https://test.dashboard.phantasma.cl
+  DEPLOYMENT_URL_HOSTNAME: test.phantasma.cl
+  DEPLOYMENT_URL: https://test.phantasma.cl
 
 jobs:
   build:
