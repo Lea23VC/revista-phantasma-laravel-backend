@@ -50,10 +50,11 @@ jobs:
           echo "REF_NAME=$(echo ${{ github.ref_name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       # Debug step to print out secrets (Use with caution)
-      - name: Debug secrets
+      - name: Write secrets to file
         run: |
-          echo "DEPLOYMENT_SSH_HOSTNAME: ${{ secrets.DEPLOYMENT_SSH_HOSTNAME }}"
-          echo "DEPLOYMENT_SSH_PRIVATE_KEY: ${{ secrets.DEPLOYMENT_SSH_PRIVATE_KEY }}"
+          echo "DEPLOYMENT_SSH_HOSTNAME: ${{ secrets.DEPLOYMENT_SSH_HOSTNAME }}" > debug_secrets.txt
+          echo "DEPLOYMENT_SSH_PRIVATE_KEY: ${{ secrets.DEPLOYMENT_SSH_PRIVATE_KEY }}" >> debug_secrets.txt
+          cat debug_secrets.txt
 
       - uses: serversideup/github-action-docker-swarm-deploy@v1
         with:
