@@ -7,8 +7,8 @@
 FROM serversideup/php:beta-8.3-fpm-nginx as base
 
 ## Uncomment if you need to install additional PHP extensions
-# USER root
-# RUN install-php-extensions bcmath gd
+USER root
+RUN install-php-extensions bcmath gd intl exif
 
 ############################################
 # Development Image
