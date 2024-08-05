@@ -59,12 +59,21 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.DEPLOYMENT_SSH_PRIVATE_KEY }}" > ~/.ssh/private_key.pem
           chmod 600 ~/.ssh/private_key.pem
-          echo -e "Host ${ env.DEPLOYMENT_URL_HOSTNAME }\n\tStrictHostKeyChecking no\n\tIdentityFile ~/.ssh/private_key.pem\n" >> ~/.ssh/config
+          echo -e "Host ${{ secrets.DEPLOYMENT_SSH_HOSTNAME }}\n\tStrictHostKeyChecking no\n\tIdentityFile ~/.ssh/private_key.pem\n" >> ~/.ssh/config
           ssh-keyscan -H "${{ secrets.DEPLOYMENT_SSH_HOSTNAME }}" >> ~/.ssh/known_hosts
+        shell: bash
+
+      - name: Debug SSH key permissions
+        run: |
+          ls -la ~/.ssh
+          cat ~/.ssh/config
+          ssh -vvv -i ~/.ssh/private_key.pem deploy@${{ secrets.DEPLOYMENT_SSH_HOSTNAME }} echo "SSH connection successful"
+        shell: bash
 
       - name: Test SSH connection
         run: |
-          ssh deploy@${{ secrets.DEPLOYMENT_SSH_HOSTNAME }} echo "SSH connection successful"
+          ssh -i ~/.ssh/private_key.pem deploy@${{ secrets.DEPLOYMENT_SSH_HOSTNAME }} echo "SSH connection successful"
+        shell: bash
 
       - uses: serversideup/github-action-docker-swarm-deploy@v1
         with:
