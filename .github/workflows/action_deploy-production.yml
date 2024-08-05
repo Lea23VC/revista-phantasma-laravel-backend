@@ -54,6 +54,16 @@ jobs:
           echo "DEPLOYMENT_SSH_HOSTNAME is set"
           echo "DEPLOYMENT_SSH_PRIVATE_KEY is set"
 
+      - name: Add SSH key
+        run: |
+          echo "${{ secrets.DEPLOYMENT_SSH_PRIVATE_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+          ssh-keyscan -H "${{ secrets.DEPLOYMENT_SSH_HOSTNAME }}" >> ~/.ssh/known_hosts
+
+      - name: Test SSH connection
+        run: |
+          ssh -i private_key.pem deploy@${{ secrets.DEPLOYMENT_SSH_HOSTNAME }} echo "SSH connection successful"
+
       - uses: serversideup/github-action-docker-swarm-deploy@v1
         with:
           # 👇 Ensure these are correct and that you've set the appropriate secrets.
