@@ -57,10 +57,15 @@ jobs:
       - name: Setup SSH key and config
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOYMENT_SSH_PRIVATE_KEY }}" > ~/.ssh/private_key.pem
+          echo "${{ secrets.DEPLOYMENT_SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/private_key.pem
           chmod 600 ~/.ssh/private_key.pem
           echo -e "Host ${{ secrets.DEPLOYMENT_SSH_HOSTNAME }}\n\tStrictHostKeyChecking no\n\tIdentityFile ~/.ssh/private_key.pem\n" >> ~/.ssh/config
           ssh-keyscan -H "${{ secrets.DEPLOYMENT_SSH_HOSTNAME }}" >> ~/.ssh/known_hosts
+        shell: bash
+
+      - name: Print private key for debugging
+        run: |
+          cat ~/.ssh/private_key.pem
         shell: bash
 
       - name: Debug SSH key permissions
