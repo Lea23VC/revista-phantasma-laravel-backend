@@ -37,10 +37,14 @@ jobs:
           echo "DEPLOYMENT_SSH_HOSTNAME is set"
           echo "DEPLOYMENT_SSH_PRIVATE_KEY is set"
 
-      - name: Start SSH agent
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.DEPLOYMENT_SSH_PRIVATE_KEY }}
+      - name: Setup SSH key and config
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOYMENT_SSH_PRIVATE_KEY }}" > ~/.ssh/private_key.pem
+          chmod 600 ~/.ssh/private_key.pem
+          echo -e "Host ${{ secrets.DEPLOYMENT_SSH_HOSTNAME }}\n\tStrictHostKeyChecking no\n\tIdentityFile ~/.ssh/private_key.pem\n" >> ~/.ssh/config
+          ssh-keyscan -H "${{ secrets.DEPLOYMENT_SSH_HOSTNAME }}" >> ~/.ssh/known_hosts
+        shell: bash
 
       - name: Test SSH connection with verbose output
         run: |
