@@ -22,5 +22,9 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         NavigationResource::navigationGroup(__('Settings'));
+
+        if (config('app.env') !== 'local') {
+            URL::forceScheme('https');
+        }
     }
 }
