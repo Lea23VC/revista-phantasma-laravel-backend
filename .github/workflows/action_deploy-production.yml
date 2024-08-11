@@ -55,7 +55,6 @@ jobs:
         with:
           deployment_ssh_private_key: "${{ secrets.DEPLOYMENT_SSH_PRIVATE_KEY }}"
           remote_ssh_server_hostname: "${{ secrets.DEPLOYMENT_SSH_HOSTNAME }}"
-          remote_ssh_deployment_user: "ubuntu"
           registry: "ghcr.io"
           registry-username: "${{ github.actor }}"
           registry-token: "${{ secrets.GITHUB_TOKEN }}"
