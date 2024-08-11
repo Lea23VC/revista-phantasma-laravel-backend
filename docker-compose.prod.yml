@@ -1,35 +1,34 @@
 services:
-
   traefik:
-      networks:
-          - web-public
-      ports:
-        - "80:80"
-        - "443:443"
-      deploy:
-        update_config:
-          parallelism: 1
-          delay: 5s
-          order: stop-first
-        placement:
-          constraints:
-            - node.role==manager
-      volumes:
-        # Add Docker as a mounted volume, so that Traefik can read the labels of other services
-        - /var/run/docker.sock:/var/run/docker.sock:ro
-        - certificates:/certificates
-      configs:
-        - source: traefik
-          target: /etc/traefik/traefik.yml
+    networks:
+      - web-public
+    ports:
+      - "80:80"
+      - "443:443"
+    deploy:
+      update_config:
+        parallelism: 1
+        delay: 5s
+        order: stop-first
+      placement:
+        constraints:
+          - node.role==manager
+    volumes:
+      # Add Docker as a mounted volume, so that Traefik can read the labels of other services
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - certificates:/certificates
+    configs:
+      - source: traefik
+        target: /etc/traefik/traefik.yml
 
   mariadb:
     networks:
       - web-public
     environment:
-        MARIADB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
-        MARIADB_DATABASE: "${DB_NAME}"
-        MARIADB_USER: "${DB_USERNAME}"
-        MARIADB_PASSWORD: "${DB_PASSWORD}"
+      MARIADB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MARIADB_DATABASE: "${DB_NAME}"
+      MARIADB_USER: "${DB_USERNAME}"
+      MARIADB_PASSWORD: "${DB_PASSWORD}"
     deploy:
       placement:
         constraints:
@@ -40,7 +39,7 @@ services:
       - database_shared:/shared
 
   ssh:
-    # We use an SSH image so we can securely tunnel into the Docker network with 
+    # We use an SSH image so we can securely tunnel into the Docker network with
     # tools like Sequel Pro, TablePlus, Sequel Ace, etc.
     # Learn more how to secure your tunnel here: https://github.com/serversideup/docker-ssh
     image: serversideup/docker-ssh
@@ -49,18 +48,17 @@ services:
         published: 2222
         mode: host
     environment:
-      # Change the keys below to your own keys 
+      # Change the keys below to your own keys
       AUTHORIZED_KEYS: >
         "# Start Keys
-         ssh-ed25519 1234567890abcdefghijklmnoqrstuvwxyz user-a
-         ssh-ed25519 abcdefghijklmnoqrstuvwxyz1234567890 user-b
+         ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCbeb8RyREgUjEhrsIqTpBm8eEG0AN7QbXNlwkmGspKkJXjoPU4ay/BhmYRhikwGalefmAgNEnUBl9ZVXchaQ70ARKA4MYta7BDsfIyTVd/R77IuV3kNQTU7k8DRyPE0qPi/Sl21lrMIjd0yyYsYONV9h54OYSZHvtBDqkp22AQPIc3DRZc3yRFlyQsS7s9W2ZDmsOMUc+TPRoYWG92a2p4L1jHYdpMcZ60HV9ghPURp+GLQtyiBd/tBwSaMHd/sqSh9ZZd3hu5x4gTPy+8xCuE68txvQKWbQ1z+HPVtUA62KHBSYFbXLSzVNLlXiNnNpmHRnOy4t2VkjhAXbkvKPyd
          # End Keys"
       # Be sure to configure the allowed IP addresses too
       ALLOWED_IPS: "AllowUsers *@127.0.0.1"
     volumes:
       - tunnel_ssh_host_keys:/etc/ssh/ssh_host_keys
     networks:
-        - web-public
+      - web-public
 
   php:
     image: ${DEPLOYMENT_IMAGE_PHP} # 👈 Be sure to change this to your own image
@@ -88,7 +86,7 @@ services:
         - "traefik.http.services.my-php-app.loadbalancer.server.port=8080"
         - "traefik.http.services.my-php-app.loadbalancer.server.scheme=http"
         # Health check
-        - "traefik.http.services.my-php-app.loadbalancer.healthcheck.path=/ping"
+        - "traefik.http.services.my-php-app.loadbalancer.healthcheck.path=/healthcheck"
         - "traefik.http.services.my-php-app.loadbalancer.healthcheck.interval=100ms"
         - "traefik.http.services.my-php-app.loadbalancer.healthcheck.timeout=75ms"
         - "traefik.http.services.my-php-app.loadbalancer.healthcheck.scheme=http"
