@@ -120,7 +120,7 @@ constructs:
     type: storage
 
 custom:
-  domain: ${opt:domain, 'test.phantasma.cl'} # Use CLI option --domain to override the domain, defaults to test.phantasma.cl
+  domain: ${opt:domain, 'staging.phantasma.cl'} # Use CLI option --domain to override the domain, defaults to test.phantasma.cl
 
 plugins:
   - ./vendor/bref/bref
