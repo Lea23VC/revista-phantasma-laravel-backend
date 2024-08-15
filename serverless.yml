@@ -2,161 +2,126 @@ service: revista-phantasma-backend
 
 provider:
     name: aws
+    profile: new-lea
     memorySize: 2048
-    # The AWS region in which to deploy (us-east-1 is the default)
     region: us-east-1
-    # Environment variables
-    # environment:
+    stage: ${opt:stage, 'dev'}  # Default to 'dev' if not specified
     environment:
-        APP_ENV: production # Or use ${sls:stage} if you want the environment to match the stage
+        APP_ENV: ${self:provider.stage}
         QUEUE_CONNECTION: sqs
         SQS_QUEUE: ${construct:jobs.queueUrl}
         APP_NAME: "Revista Phantasma"
-        APP_KEY: ${ssm:/revista_phantasma/prod/APP_KEY}
-        APP_DEBUG: ${ssm:/revista_phantasma/prod/APP_DEBUG}
-        APP_URL: ${ssm:/revista_phantasma/prod/APP_URL}
-        LOG_CHANNEL: ${ssm:/revista_phantasma/prod/LOG_CHANNEL}
-        LOG_DEPRECATIONS_CHANNEL: ${ssm:/revista_phantasma/prod/LOG_DEPRECATIONS_CHANNEL}
-        LOG_LEVEL: ${ssm:/revista_phantasma/prod/LOG_LEVEL}
-        DB_CONNECTION: ${ssm:/revista_phantasma/prod/DB_CONNECTION}
-        DB_HOST: ${ssm:/revista_phantasma/prod/DB_HOST}
-        DB_PORT: ${ssm:/revista_phantasma/prod/DB_PORT}
-        DB_DATABASE: ${ssm:/revista_phantasma/prod/DB_DATABASE}
-        DB_USERNAME: ${ssm:/revista_phantasma/prod/DB_USERNAME}
-        DB_PASSWORD: ${ssm:/revista_phantasma/prod/DB_PASSWORD}
-        BROADCAST_DRIVER: ${ssm:/revista_phantasma/prod/BROADCAST_DRIVER}
-        CACHE_DRIVER: ${ssm:/revista_phantasma/prod/CACHE_DRIVER}
-        FILESYSTEM_DISK: ${ssm:/revista_phantasma/prod/FILESYSTEM_DISK}
-        SESSION_DRIVER: ${ssm:/revista_phantasma/prod/SESSION_DRIVER}
-        SESSION_LIFETIME: ${ssm:/revista_phantasma/prod/SESSION_LIFETIME}
-        REDIS_HOST: ${ssm:/revista_phantasma/prod/REDIS_HOST}
-        REDIS_PASSWORD: ${ssm:/revista_phantasma/prod/REDIS_PASSWORD}
-        REDIS_PORT: ${ssm:/revista_phantasma/prod/REDIS_PORT}
-        MAIL_MAILER: ${ssm:/revista_phantasma/prod/MAIL_MAILER}
-        MAIL_HOST: ${ssm:/revista_phantasma/prod/MAIL_HOST}
-        MAIL_PORT: ${ssm:/revista_phantasma/prod/MAIL_PORT}
-        MAIL_USERNAME: ${ssm:/revista_phantasma/prod/MAIL_USERNAME}
-        MAIL_PASSWORD: ${ssm:/revista_phantasma/prod/MAIL_PASSWORD}
-        MAIL_ENCRYPTION: ${ssm:/revista_phantasma/prod/MAIL_ENCRYPTION}
-        MAIL_FROM_ADDRESS: ${ssm:/revista_phantasma/prod/MAIL_FROM_ADDRESS}
-        MAIL_FROM_NAME: ${ssm:/revista_phantasma/prod/MAIL_FROM_NAME}
-        # AWS_ACCESS_KEY_ID: ${ssm:/revista_phantasma/prod/AWS_ACCESS_KEY_ID}
-        # AWS_SECRET_ACCESS_KEY: ${ssm:/revista_phantasma/prod/AWS_SECRET_ACCESS_KEY}
-        # AWS_DEFAULT_REGION: ${ssm:/revista_phantasma/prod/AWS_DEFAULT_REGION}
-        AWS_BUCKET: ${ssm:/revista_phantasma/prod/AWS_BUCKET}
-        AWS_USE_PATH_STYLE_ENDPOINT: ${ssm:/revista_phantasma/prod/AWS_USE_PATH_STYLE_ENDPOINT}
-        # PUSHER_APP_ID: ${ssm:/revista_phantasma/prod/PUSHER_APP_ID}
-        # PUSHER_APP_KEY: ${ssm:/revista_phantasma/prod/PUSHER_APP_KEY}
-        # PUSHER_APP_SECRET: ${ssm:/revista_phantasma/prod/PUSHER_APP_SECRET}
-        # PUSHER_HOST: ${ssm:/revista_phantasma/prod/PUSHER_HOST}
-        PUSHER_PORT: ${ssm:/revista_phantasma/prod/PUSHER_PORT}
-        PUSHER_SCHEME: ${ssm:/revista_phantasma/prod/PUSHER_SCHEME}
-        PUSHER_APP_CLUSTER: ${ssm:/revista_phantasma/prod/PUSHER_APP_CLUSTER}
-        VITE_APP_NAME: ${ssm:/revista_phantasma/prod/VITE_APP_NAME}
-        VITE_PUSHER_APP_KEY: ${ssm:/revista_phantasma/prod/VITE_PUSHER_APP_KEY}
-        VITE_PUSHER_HOST: ${ssm:/revista_phantasma/prod/VITE_PUSHER_HOST}
-        VITE_PUSHER_PORT: ${ssm:/revista_phantasma/prod/VITE_PUSHER_PORT}
-        VITE_PUSHER_SCHEME: ${ssm:/revista_phantasma/prod/VITE_PUSHER_SCHEME}
-        VITE_PUSHER_APP_CLUSTER: ${ssm:/revista_phantasma/prod/VITE_PUSHER_APP_CLUSTER}
-        ASSET_URL: ${ssm:/revista_phantasma/prod/ASSET_URL}
-        OWNER: ${ssm:/revista_phantasma/prod/OWNER}
-        REPO_NAME: ${ssm:/revista_phantasma/prod/REPO_NAME}
-        FRONTEND_URL: ${ssm:/revista_phantasma/prod/FRONTEND_URL}
-        ANALYTICS_PROPERTY_ID: ${ssm:/revista_phantasma/prod/ANALYTICS_PROPERTY_ID}
-        DYNAMODB_CACHE_TABLE: !Ref CacheTable
-
-    iamRoleStatements:
-                - Effect: Allow
-                  Action:
-                    - s3:*
-                  Resource: 
-                    - "arn:aws:s3:::revista-phantasma-media/*"
-                - Effect: "Allow"
-                  Action:
-                    - "ses:SendEmail"
-                    - "ses:SendRawEmail"
-                  Resource: "*"
-                - Effect: Allow
-                  Resource: !GetAtt CacheTable.Arn
-                  Action:
-                      - dynamodb:DescribeTable
-                      - dynamodb:Query
-                      - dynamodb:Scan
-                      - dynamodb:GetItem
-                      - dynamodb:PutItem
-                      - dynamodb:UpdateItem
-                      - dynamodb:DeleteItem
-                
+        APP_KEY: ${ssm:/revista_phantasma/${self:provider.stage}/APP_KEY}
+        APP_DEBUG: ${ssm:/revista_phantasma/${self:provider.stage}/APP_DEBUG}
+        APP_URL: ${ssm:/revista_phantasma/${self:provider.stage}/APP_URL}
+        LOG_CHANNEL: ${ssm:/revista_phantasma/${self:provider.stage}/LOG_CHANNEL}
+        LOG_DEPRECATIONS_CHANNEL: ${ssm:/revista_phantasma/${self:provider.stage}/LOG_DEPRECATIONS_CHANNEL}
+        LOG_LEVEL: ${ssm:/revista_phantasma/${self:provider.stage}/LOG_LEVEL}
+        DB_CONNECTION: ${ssm:/revista_phantasma/${self:provider.stage}/DB_CONNECTION}
+        DB_HOST: ${ssm:/revista_phantasma/${self:provider.stage}/DB_HOST}
+        DB_PORT: ${ssm:/revista_phantasma/${self:provider.stage}/DB_PORT}
+        DB_DATABASE: ${ssm:/revista_phantasma/${self:provider.stage}/DB_DATABASE}
+        DB_USERNAME: ${ssm:/revista_phantasma/${self:provider.stage}/DB_USERNAME}
+        DB_PASSWORD: ${ssm:/revista_phantasma/${self:provider.stage}/DB_PASSWORD}
+        BROADCAST_DRIVER: ${ssm:/revista_phantasma/${self:provider.stage}/BROADCAST_DRIVER}
+        CACHE_DRIVER: ${ssm:/revista_phantasma/${self:provider.stage}/CACHE_DRIVER}
+        FILESYSTEM_DISK: s3
+        SESSION_DRIVER: ${ssm:/revista_phantasma/${self:provider.stage}/SESSION_DRIVER}
+        SESSION_LIFETIME: ${ssm:/revista_phantasma/${self:provider.stage}/SESSION_LIFETIME}
+        REDIS_HOST: ${ssm:/revista_phantasma/${self:provider.stage}/REDIS_HOST}
+        REDIS_PASSWORD: ${ssm:/revista_phantasma/${self:provider.stage}/REDIS_PASSWORD}
+        REDIS_PORT: ${ssm:/revista_phantasma/${self:provider.stage}/REDIS_PORT}
+        MAIL_MAILER: ${ssm:/revista_phantasma/${self:provider.stage}/MAIL_MAILER}
+        MAIL_HOST: ${ssm:/revista_phantasma/${self:provider.stage}/MAIL_HOST}
+        MAIL_PORT: ${ssm:/revista_phantasma/${self:provider.stage}/MAIL_PORT}
+        MAIL_USERNAME: ${ssm:/revista_phantasma/${self:provider.stage}/MAIL_USERNAME}
+        MAIL_PASSWORD: ${ssm:/revista_phantasma/${self:provider.stage}/MAIL_PASSWORD}
+        MAIL_ENCRYPTION: ${ssm:/revista_phantasma/${self:provider.stage}/MAIL_ENCRYPTION}
+        MAIL_FROM_ADDRESS: ${ssm:/revista_phantasma/${self:provider.stage}/MAIL_FROM_ADDRESS}
+        MAIL_FROM_NAME: ${ssm:/revista_phantasma/${self:provider.stage}/MAIL_FROM_NAME}
+        AWS_BUCKET: ${construct:media.bucketName}
+        AWS_USE_PATH_STYLE_ENDPOINT: false
+        PUSHER_PORT: ${ssm:/revista_phantasma/${self:provider.stage}/PUSHER_PORT}
+        PUSHER_SCHEME: ${ssm:/revista_phantasma/${self:provider.stage}/PUSHER_SCHEME}
+        PUSHER_APP_CLUSTER: ${ssm:/revista_phantasma/${self:provider.stage}/PUSHER_APP_CLUSTER}
+        VITE_APP_NAME: ${ssm:/revista_phantasma/${self:provider.stage}/VITE_APP_NAME}
+        VITE_PUSHER_APP_KEY: ${ssm:/revista_phantasma/${self:provider.stage}/VITE_PUSHER_APP_KEY}
+        VITE_PUSHER_HOST: ${ssm:/revista_phantasma/${self:provider.stage}/VITE_PUSHER_HOST}
+        VITE_PUSHER_PORT: ${ssm:/revista_phantasma/${self:provider.stage}/VITE_PUSHER_PORT}
+        VITE_PUSHER_SCHEME: ${ssm:/revista_phantasma/${self:provider.stage}/VITE_PUSHER_SCHEME}
+        VITE_PUSHER_APP_CLUSTER: ${ssm:/revista_phantasma/${self:provider.stage}/VITE_PUSHER_APP_CLUSTER}
+        # ASSET_URL: ${construct:website.url}
+        OWNER: ${ssm:/revista_phantasma/${self:provider.stage}/OWNER}
+        REPO_NAME: ${ssm:/revista_phantasma/${self:provider.stage}/REPO_NAME}
+        FRONTEND_URL: ${construct:website.url}
+        # ASSET URL from
+        ANALYTICS_PROPERTY_ID: ${ssm:/revista_phantasma/${self:provider.stage}/ANALYTICS_PROPERTY_ID}
+        DYNAMODB_CACHE_TABLE: ${self:service}-${self:provider.stage}-cache
 
 package:
-    # Files and directories to exclude from deployment
-    patterns:
-        - '!node_modules/**'
-        - '!public/storage'
-        - '!resources/assets/**'
-        - '!storage/**'
-        - '!tests/**'
+  patterns:
+    - '!node_modules/**'
+    - '!public/storage'
+    - '!resources/assets/**'
+    - '!storage/**'
+    - '!tests/**'
+    - '!.infrastructure/**'
 
 functions:
+  web:
+    handler: public/index.php
+    runtime: php-83-fpm
+    timeout: 28
+    events:
+      - httpApi: '*'
+      - schedule:
+          rate: rate(5 minutes)
+          input:
+            warmer: true
+    layers:
+      - ${bref-extra:gd-php-83}
+      - ${bref-extra:gmp-php-83}
 
-    # This function runs the Laravel website/API
-    web:
-        handler: public/index.php
-        runtime: php-83-fpm
-        timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
-        events:
-            - httpApi: '*'
-            - schedule:
-                rate: rate(5 minutes)
-                input:
-                    warmer: true
-        layers:
-            - ${bref-extra:gd-php-83}
-            - ${bref-extra:gmp-php-83}
-
-        
-        
-       
-        
-
-    # This function lets us run artisan commands in Lambda
-    artisan:
-        handler: artisan
-        runtime: php-83-console
-        timeout: 720 # in seconds
-        layers:
-            - ${bref-extra:gd-php-83}
-            - ${bref-extra:gmp-php-83}
-        # Uncomment to also run the scheduler every minute
-        events:
-           - schedule:
-                 rate: rate(1 minute)
-                 input: '"schedule:run"'
+  artisan:
+    handler: artisan
+    runtime: php-83-console
+    timeout: 720
+    layers:
+      - ${bref-extra:gd-php-83}
+      - ${bref-extra:gmp-php-83}
+    events:
+      - schedule:
+          rate: rate(1 minute)
+          input: '"schedule:run"'
 
 constructs:
-    website:
-        type: server-side-website
-        assets:
-            '/js/*': public/js
-            '/css/*': public/css
-            '/favicon.ico': public/favicon.ico
-            '/robots.txt': public/robots.txt
-            '/vendor/telescope/*': public/vendor/telescope
-            '/images/*': public/images
+  website:
+    type: server-side-website
+    assets:
+      '/js/*': public/js
+      '/css/*': public/css
+      '/favicon.ico': public/favicon.ico
+      '/robots.txt': public/robots.txt
+      '/vendor/telescope/*': public/vendor/telescope
+      '/images/*': public/images
+    domain: '${self:custom.domain}'
+    certificate: '${ssm:/revista_phantasma/${self:provider.stage}/ACM_CERT_ARN}'
 
-        domain: 'dashboard.phantasma.cl'
-        certificate: 'arn:aws:acm:us-east-1:728906975086:certificate/341de4d5-14d3-426c-918e-48329073a03f'
+  jobs:
+    type: queue
+    worker:
+      handler: Bref\LaravelBridge\Queue\QueueHandler
+      runtime: php-83
+      timeout: 60
+      layers:
+        - ${bref-extra:gd-php-83}
+        - ${bref-extra:gmp-php-83}
 
-    jobs:
-        type: queue
-        worker:
-            handler: Bref\LaravelBridge\Queue\QueueHandler
-            runtime: php-83
-            timeout: 60 # seconds
-            layers:
-            - ${bref-extra:gd-php-83}
-            - ${bref-extra:gmp-php-83}
+  media:
+    type: storage
 
+custom:
+  domain: ${opt:domain, 'test.phantasma.cl'} # Use CLI option --domain to override the domain, defaults to test.phantasma.cl
 
 plugins:
   - ./vendor/bref/bref
@@ -164,42 +129,19 @@ plugins:
   - ./vendor/bref/extra-php-extensions
   - serverless-plugin-warmup
 
-
 resources:
-    Resources:
-        CacheTable:
-            Type: AWS::DynamoDB::Table
-            Properties:
-                AttributeDefinitions: # only keys are defined here, other attributes are dynamic
-                    -   AttributeName: id # adds a mandatory id field
-                        AttributeType: S # the type of id is a string
-                BillingMode: PAY_PER_REQUEST # billed for each request instead of paying for a constant capacity
-                TimeToLiveSpecification: # deletes cache keys automatically based on a ttl field which contains a timestamp
-                    AttributeName: ttl
-                    Enabled: true
-                KeySchema:
-                    -   AttributeName: id
-                        KeyType: HASH # the
-
-# resources:
-#   Resources:
-#     MyS3Bucket:
-#       Type: AWS::S3::Bucket
-#       Properties:
-#         BucketName: revista-phantasma-media-repository
-#         CorsConfiguration:
-#           CorsRules:
-#             - AllowedHeaders:
-#                 - "*"
-#               AllowedMethods:
-#                 - GET
-#                 - PUT
-#                 - POST
-#                 - DELETE
-#                 - HEAD
-#               AllowedOrigins:
-#                 - "http://127.0.0.1:8000"
-#                 - "https://6bv7jhird5.execute-api.us-east-1.amazonaws.com"
-#                 - "https://d2nkzp12b3gige.cloudfront.net"
-#                 - "https://backend-revista-phantasma.revista_phantasma.xyz"
-
+  Resources:
+    CacheTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:service}-${self:provider.stage}-cache
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        BillingMode: PAY_PER_REQUEST
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
