@@ -27,7 +27,7 @@ jobs:
 
       # This step installs the Serverless Framework globally.
       - name: Install Node modules
-        run: npm install
+        run: yarn install
 
       # This step sets up PHP environment with the specified version.
       - name: Setup PHP
