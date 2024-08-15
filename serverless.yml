@@ -2,7 +2,6 @@ service: revista-phantasma-backend
 
 provider:
     name: aws
-    profile: new-lea
     memorySize: 2048
     region: us-east-1
     stage: ${opt:stage, 'dev'}  # Default to 'dev' if not specified
