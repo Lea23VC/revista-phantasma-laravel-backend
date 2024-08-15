@@ -26,7 +26,7 @@ def create_secrets():
                 "ssm",
                 "put-parameter",
                 "--profile",
-                "default",
+                "new-lea",
                 "--name",
                 f"/revista_phantasma/prod/{key}",
                 "--value",
