@@ -38,7 +38,7 @@ provider:
         MAIL_ENCRYPTION: ${ssm:/revista_phantasma/${self:provider.stage}/MAIL_ENCRYPTION}
         MAIL_FROM_ADDRESS: ${ssm:/revista_phantasma/${self:provider.stage}/MAIL_FROM_ADDRESS}
         MAIL_FROM_NAME: ${ssm:/revista_phantasma/${self:provider.stage}/MAIL_FROM_NAME}
-        AWS_BUCKET: ${construct:media.bucketName}
+        # AWS_BUCKET: ${construct:media.bucketName}
         AWS_USE_PATH_STYLE_ENDPOINT: false
         PUSHER_PORT: ${ssm:/revista_phantasma/${self:provider.stage}/PUSHER_PORT}
         PUSHER_SCHEME: ${ssm:/revista_phantasma/${self:provider.stage}/PUSHER_SCHEME}
@@ -116,12 +116,12 @@ constructs:
         - ${bref-extra:gd-php-83}
         - ${bref-extra:gmp-php-83}
 
-  media:
-    type: storage
-    extensions:
-        bucket:
-            Properties:
-                AccessControl: PublicRead
+#   media:
+#     type: storage
+#     extensions:
+#         bucket:
+#             Properties:
+#                 AccessControl: PublicRead
 
 custom:
   domain: ${opt:domain, 'staging.phantasma.cl'} # Use CLI option --domain to override the domain, defaults to test.phantasma.cl
