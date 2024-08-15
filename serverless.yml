@@ -118,6 +118,10 @@ constructs:
 
   media:
     type: storage
+    extensions:
+        bucket:
+            Properties:
+                AccessControl: PublicRead
 
 custom:
   domain: ${opt:domain, 'staging.phantasma.cl'} # Use CLI option --domain to override the domain, defaults to test.phantasma.cl
