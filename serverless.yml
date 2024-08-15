@@ -49,7 +49,7 @@ provider:
         VITE_PUSHER_PORT: ${ssm:/revista_phantasma/${self:provider.stage}/VITE_PUSHER_PORT}
         VITE_PUSHER_SCHEME: ${ssm:/revista_phantasma/${self:provider.stage}/VITE_PUSHER_SCHEME}
         VITE_PUSHER_APP_CLUSTER: ${ssm:/revista_phantasma/${self:provider.stage}/VITE_PUSHER_APP_CLUSTER}
-        # ASSET_URL: ${construct:website.url}
+        ASSET_URL: ${construct:website.url}
         OWNER: ${ssm:/revista_phantasma/${self:provider.stage}/OWNER}
         REPO_NAME: ${ssm:/revista_phantasma/${self:provider.stage}/REPO_NAME}
         FRONTEND_URL: ${construct:website.url}
