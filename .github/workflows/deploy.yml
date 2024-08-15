@@ -18,6 +18,8 @@ jobs:
       # This step sets up Node.js environment.
       - name: Setup Node.js
         uses: actions/setup-node@v3
+        with:
+          node-version: 20
 
       # This step installs the Serverless Framework globally.
       - name: Install Serverless Framework
