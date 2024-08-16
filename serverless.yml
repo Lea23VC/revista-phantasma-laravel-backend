@@ -119,9 +119,16 @@ constructs:
   media:
     type: storage
     extensions:
-        bucket:
-            Properties:
-                AccessControl: PublicRead
+    bucket:
+    BucketPolicy:
+        PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+            - Effect: Allow
+            - Principal: "*"
+            - Action: "s3:GetObject"
+            - Resource: "arn:aws:s3:::${construct:media.bucketName}/*"
+
 
 custom:
   domain: ${opt:domain, 'staging.phantasma.cl'} # Use CLI option --domain to override the domain, defaults to test.phantasma.cl
