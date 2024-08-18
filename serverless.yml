@@ -130,7 +130,7 @@ constructs:
 
 
 custom:
-  domain: ${opt:domain, 'staging.phantasma.cl'} # Use CLI option --domain to override the domain, defaults to test.phantasma.cl
+  domain: ${opt:domain, 'dashboard.phantasma.cl'} # Use CLI option --domain to override the domain, defaults to test.phantasma.cl
 
 plugins:
   - ./vendor/bref/bref
