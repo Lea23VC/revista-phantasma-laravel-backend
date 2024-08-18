@@ -39,6 +39,7 @@ provider:
         MAIL_FROM_ADDRESS: ${ssm:/revista_phantasma/${self:provider.stage}/MAIL_FROM_ADDRESS}
         MAIL_FROM_NAME: ${ssm:/revista_phantasma/${self:provider.stage}/MAIL_FROM_NAME}
         AWS_PRIVATE_BUCKET: ${construct:media.bucketName}
+        AWS_BUCKET: ${ssm:/revista_phantasma/${self:provider.stage}/AWS_BUCKET}
         AWS_USE_PATH_STYLE_ENDPOINT: false
         PUSHER_PORT: ${ssm:/revista_phantasma/${self:provider.stage}/PUSHER_PORT}
         PUSHER_SCHEME: ${ssm:/revista_phantasma/${self:provider.stage}/PUSHER_SCHEME}
