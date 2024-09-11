@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\PostResource\Widgets;
 
 use App\Models\Post;
+use Carbon\Carbon;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -40,7 +41,15 @@ class LatestPosts extends BaseWidget
                 TextColumn::make('categories.name')->label(__('Categories'))
                     ->listWithLineBreaks()->badge(),
                 TextColumn::make('author.name')->label(__('Author'))->sortable(),
-                TextColumn::make('publish_at')->label(__('Published at'))->since()->sortable(),
+                TextColumn::make('publish_at')->label(__('Published at'))->formatStateUsing(function (string $state): string {
+                    $publishedAt = Carbon::parse($state);
+
+                    if ($publishedAt->isToday()) {
+                        return __('Hoy');
+                    }
+
+                    return $publishedAt->diffForHumans(); // Devuelve el tiempo relativo para las fechas anteriores.
+                })->sortable(),
             ])->paginated(false)->actions([
                 Action::make("Go to post")->label(__('Go to post'))
                     ->hidden(fn(Post $record): bool => !$record->is_published)
