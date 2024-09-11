@@ -59,6 +59,7 @@ provider:
         DYNAMODB_CACHE_TABLE: ${self:service}-${self:provider.stage}-cache
         IPINFO_TOKEN: ${ssm:/revista_phantasma/${self:provider.stage}/IPINFO_TOKEN}
         TZ: 'America/Santiago'
+        AWS_URL: ${ssm:/revista_phantasma/${self:provider.stage}/AWS_URL}
 
     iamRoleStatements:
       - Effect: Allow
