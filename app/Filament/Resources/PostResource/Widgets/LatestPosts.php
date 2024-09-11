@@ -7,6 +7,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\ActionsPosition;
+use Filament\Tables\Actions\Action;
 
 class LatestPosts extends BaseWidget
 {
@@ -39,6 +41,12 @@ class LatestPosts extends BaseWidget
                     ->listWithLineBreaks()->badge(),
                 TextColumn::make('author.name')->label(__('Author'))->sortable(),
                 TextColumn::make('publish_at')->label(__('Published at'))->since()->sortable(),
-            ])->paginated(false);
+            ])->paginated(false)->actions([
+                Action::make("Go to post")->label(__('Go to post'))
+                    ->hidden(fn(Post $record): bool => !$record->is_published)
+                    ->url(fn(Post $record): string => env("FRONTEND_URL") . 'post/' . $record->slug, true),
+                Tables\Actions\EditAction::make(),
+            ], position: ActionsPosition::BeforeColumns)
+        ;
     }
 }
