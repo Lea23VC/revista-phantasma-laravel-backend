@@ -12,18 +12,31 @@ class StatsOverview extends BaseWidget
 {
     protected function getStats(): array
     {
-        $totalPosts = Post::count();
-        $publishedPosts = Post::where('is_published', true)->count();
-        $unpublishedPosts = Post::where('is_published', false)->count();
-        $totalCategories = Category::count();
+        $totalPosts = Post::count(); // Total posts for all time
+        $publishedPosts = Post::where('is_published', true)->count(); // Published posts for all time
+        $unpublishedPosts = Post::where('is_published', false)->count(); // Unpublished posts for all time
+        $totalCategories = Category::count(); // Total categories for all time
 
-        // Date-related stats
+        // Date-related stats (for all time)
         $postsThisMonth = Post::whereMonth('publish_at', Carbon::now()->month)->count();
         $postsLast7Days = Post::where('publish_at', '>=', Carbon::now()->subDays(7))->count();
 
-        // Calculate the average posts per month
-        $monthsActive = Post::whereNotNull('publish_at')->distinct()->selectRaw('YEAR(publish_at) as year, MONTH(publish_at) as month')->count();
-        $averagePostsPerMonth = $monthsActive > 0 ? round($totalPosts / $monthsActive, 2) : 0;
+        // Calculate average posts per month for the current year
+        $currentYear = Carbon::now()->year;
+        $postsThisYear = Post::whereYear('publish_at', $currentYear)->count(); // Only count posts from the current year
+
+        // Get the first post of the current year
+        $firstPostThisYear = Post::whereYear('publish_at', $currentYear)->orderBy('publish_at', 'asc')->first();
+
+        if ($firstPostThisYear) {
+            $firstPostDate = Carbon::parse($firstPostThisYear->publish_at);
+            $monthsActiveThisYear = Carbon::now()->diffInMonths($firstPostDate) + 1; // +1 to include the current month
+        } else {
+            $monthsActiveThisYear = Carbon::now()->month; // Default to current month if no posts this year
+        }
+
+        // Calculate the average posts per month for the current year
+        $averagePostsPerMonth = $monthsActiveThisYear > 0 ? round($postsThisYear / $monthsActiveThisYear, 2) : 0;
 
         return [
             Stat::make('Total de Publicaciones', $totalPosts)
@@ -52,8 +65,8 @@ class StatsOverview extends BaseWidget
                 ->description('Publicaciones en los últimos 7 días')
                 ->color('gray'),
 
-            Stat::make('Promedio de Publicaciones por Mes', $averagePostsPerMonth)
-                ->description('Promedio de publicaciones mensuales')
+            Stat::make("Promedio de Publicaciones por Mes ($currentYear)", $averagePostsPerMonth)
+                ->description("Promedio de publicaciones mensuales en $currentYear")
                 ->color('gray'),
         ];
     }
