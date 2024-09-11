@@ -25,11 +25,20 @@ class LatestPosts extends BaseWidget
 
             )
             ->columns([
-                TextColumn::make('title')->label(__('Title'))->sortable(),
+                TextColumn::make('title')->label(__('Title'))->sortable()->limit(50)->tooltip(function (TextColumn $column): ?string {
+                    $state = $column->getState();
+
+                    if (strlen($state) <= $column->getCharacterLimit()) {
+                        return null;
+                    }
+
+                    // Only render the tooltip if the column content exceeds the length limit.
+                    return $state;
+                }),
                 TextColumn::make('categories.name')->label(__('Categories'))
                     ->listWithLineBreaks()->badge(),
                 TextColumn::make('author.name')->label(__('Author'))->sortable(),
-                TextColumn::make('published_at')->label(__('Published at'))->sortable(),
+                TextColumn::make('publish_at')->label(__('Published at'))->sortable(),
             ])->paginated(false);
     }
 }
