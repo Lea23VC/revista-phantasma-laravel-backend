@@ -36,7 +36,7 @@ class StatsOverview extends BaseWidget
         }
 
         // Calculate the average posts per month for the current year
-        $averagePostsPerMonth = $monthsActiveThisYear > 0 ? round($postsThisYear / $monthsActiveThisYear, 2) : 0;
+        $averagePostsPerMonth = $monthsActiveThisYear > 0 ? round($postsThisYear / $monthsActiveThisYear) : 0;
 
         return [
             Stat::make('Total de Publicaciones', $totalPosts)
