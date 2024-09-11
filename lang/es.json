@@ -46,5 +46,15 @@
     "Banner Position": "Posición de imagen de fondo",
     "Image position preview": "Vista previa de la posición de la imagen",
     "Image position": "Posición de la imagen",
-    "Preview": "Vista previa"
+    "Preview": "Vista previa",
+    "Total Posts": "Total de publicaciones",
+    "Total number of posts": "Número total de publicaciones",
+    "Published Posts": "Publicaciones publicadas",
+    "Currently published posts": "Publicaciones actualmente publicadas",
+    "Unpublished Posts": "Publicaciones no publicadas",
+    "Currently unpublished posts": "Publicaciones actualmente no publicadas",
+    "Total Categories": "Total de categorías",
+    "Categories assigned to posts": "Categorías asignadas a las publicaciones",
+    "Total Attachments": "Total de adjuntos",
+    "Total number of attachments in posts": "Número total de adjuntos en las publicaciones"
 }

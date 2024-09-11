@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Pages\GoogleAnalytics;
 use App\Filament\Resources\PostResource\Widgets\LatestPosts;
+use App\Filament\Widgets\StatsOverview;
 use App\Models\Category;
 use App\Models\Page;
 use Filament\Http\Middleware\Authenticate;
@@ -52,6 +53,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
+                StatsOverview::class,
                 LatestPosts::class,
                 \BezhanSalleh\FilamentGoogleAnalytics\Widgets\PageViewsWidget::class,
                 \BezhanSalleh\FilamentGoogleAnalytics\Widgets\VisitorsWidget::class,
