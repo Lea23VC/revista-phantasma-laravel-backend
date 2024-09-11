@@ -46,7 +46,10 @@ class LatestPosts extends BaseWidget
                     ->hidden(fn(Post $record): bool => !$record->is_published)
                     ->url(fn(Post $record): string => env("FRONTEND_URL") . 'post/' . $record->slug, true),
                 Tables\Actions\EditAction::make(),
-            ], position: ActionsPosition::BeforeColumns)
+            ], position: ActionsPosition::BeforeColumns)->modifyQueryUsing(function ($query) {
+                # only post that are published using is_published column
+                $query->where('is_published', true);
+            })
         ;
     }
 }
