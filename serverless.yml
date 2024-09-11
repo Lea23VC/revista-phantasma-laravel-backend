@@ -53,7 +53,7 @@ provider:
         ASSET_URL: ${construct:website.url}
         OWNER: ${ssm:/revista_phantasma/${self:provider.stage}/OWNER}
         REPO_NAME: ${ssm:/revista_phantasma/${self:provider.stage}/REPO_NAME}
-        FRONTEND_URL: ${construct:website.url}
+        FRONTEND_URL: ${ssm:/revista_phantasma/${self:provider.stage}/FRONTEND_URL}
         # ASSET URL from
         ANALYTICS_PROPERTY_ID: ${ssm:/revista_phantasma/${self:provider.stage}/ANALYTICS_PROPERTY_ID}
         DYNAMODB_CACHE_TABLE: ${self:service}-${self:provider.stage}-cache

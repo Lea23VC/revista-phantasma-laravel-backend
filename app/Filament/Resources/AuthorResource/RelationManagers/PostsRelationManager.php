@@ -56,7 +56,7 @@ class PostsRelationManager extends RelationManager
             ->actions([
 
                 Action::make("Go to post")->label(__("Go to post"))
-                    ->url(fn (Post $record): string => env("FRONTEND_URL") . 'post/' . $record->slug, true),
+                    ->url(fn(Post $record): string => env("FRONTEND_URL") . 'post/' . $record->slug, true),
 
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),

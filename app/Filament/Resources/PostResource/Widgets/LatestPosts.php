@@ -38,7 +38,7 @@ class LatestPosts extends BaseWidget
                 TextColumn::make('categories.name')->label(__('Categories'))
                     ->listWithLineBreaks()->badge(),
                 TextColumn::make('author.name')->label(__('Author'))->sortable(),
-                TextColumn::make('publish_at')->label(__('Published at'))->sortable(),
+                TextColumn::make('publish_at')->label(__('Published at'))->since()->sortable(),
             ])->paginated(false);
     }
 }

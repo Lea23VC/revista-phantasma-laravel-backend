@@ -58,7 +58,7 @@ class AuthorResource extends Resource
                 //
                 TextColumn::make('name')->label(__('Name'))->searchable()->sortable(),
                 TextColumn::make('url')->searchable()->sortable(),
-                SpatieMediaLibraryImageColumn::make('profilePic')->label(__('Profile pic'))->square()->disk('s3')->visibility('public'),
+                // SpatieMediaLibraryImageColumn::make('profilePic')->label(__('Profile pic'))->square()->disk('s3')->visibility('public'),
 
             ])
             ->filters([
