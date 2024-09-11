@@ -57,6 +57,7 @@ provider:
         # ASSET URL from
         ANALYTICS_PROPERTY_ID: ${ssm:/revista_phantasma/${self:provider.stage}/ANALYTICS_PROPERTY_ID}
         DYNAMODB_CACHE_TABLE: ${self:service}-${self:provider.stage}-cache
+        IPINFO_TOKEN: ${ssm:/revista_phantasma/${self:provider.stage}/IPINFO_TOKEN}
 
     iamRoleStatements:
       - Effect: Allow
