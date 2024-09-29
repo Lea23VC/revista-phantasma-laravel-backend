@@ -26,7 +26,6 @@ use RyanChandler\FilamentNavigation\FilamentNavigation;
 use Filament\Forms\Components\Select;
 use App\Models\Post;
 use Filament\Enums\ThemeMode;
-use Marjose123\FilamentWebhookServer\WebhookPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -106,6 +105,6 @@ class AdminPanelProvider extends PanelProvider
                             return Category::pluck('name', 'slug');
                         }),
 
-                ]), WebhookPlugin::make(), new \RickDBCN\FilamentEmail\FilamentEmail()]);
+                ]),  new \RickDBCN\FilamentEmail\FilamentEmail()]);
     }
 }
