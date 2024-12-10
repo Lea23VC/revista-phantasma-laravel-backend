@@ -59,6 +59,7 @@ class CategoryResource extends Resource
                     ->dehydrated(false),
 
                 SpatieMediaLibraryFileUpload::make('background')
+                    ->downloadable()
                     ->label(__('Background image'))
                     ->disk('s3')->visibility('public')->directory('category_backgrounds')
                     ->collection('backgrounds')->image()

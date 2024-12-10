@@ -2,7 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\GoogleAnalytics;
 use App\Filament\Resources\PostResource\Widgets\LatestPosts;
+use App\Filament\Widgets\StatsOverview;
 use App\Models\Category;
 use App\Models\Page;
 use Filament\Http\Middleware\Authenticate;
@@ -23,7 +25,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use RyanChandler\FilamentNavigation\FilamentNavigation;
 use Filament\Forms\Components\Select;
 use App\Models\Post;
-use Marjose123\FilamentWebhookServer\WebhookPlugin;
+use Filament\Enums\ThemeMode;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -32,6 +34,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->brandLogo(asset('images/phantasma_white.png'))
             ->brandLogoHeight('40px')
+            ->defaultThemeMode(ThemeMode::Dark)
             ->default()
             ->id('admin')
             ->path('')
@@ -43,12 +46,25 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
+                GoogleAnalytics::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
+                StatsOverview::class,
                 LatestPosts::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\PageViewsWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\VisitorsWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\ActiveUsersOneDayWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\ActiveUsersSevenDayWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\ActiveUsersTwentyEightDayWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\SessionsWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\SessionsDurationWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\SessionsByCountryWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\SessionsByDeviceWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\MostVisitedPagesWidget::class,
+                \BezhanSalleh\FilamentGoogleAnalytics\Widgets\TopReferrersListWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -89,6 +105,6 @@ class AdminPanelProvider extends PanelProvider
                             return Category::pluck('name', 'slug');
                         }),
 
-                ]), WebhookPlugin::make(), new \RickDBCN\FilamentEmail\FilamentEmail()]);
+                ]),  new \RickDBCN\FilamentEmail\FilamentEmail()]);
     }
 }

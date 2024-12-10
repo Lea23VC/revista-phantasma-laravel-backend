@@ -1,0 +1,68 @@
+name: Production Deployment
+on:
+  push:
+    branches:
+      - test
+
+env:
+  DEPLOYMENT_URL_HOSTNAME: test.phantasma.cl
+  DEPLOYMENT_URL: https://test.phantasma.cl
+
+jobs:
+  build:
+    uses: ./.github/workflows/service_docker-build-and-publish.yml
+    with:
+      docker-tags: ghcr.io/${{ github.repository }}:${{ github.ref_name }},ghcr.io/${{ github.repository }}:latest
+      environment: production
+    secrets: inherit
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-22.04
+    environment:
+      name: production
+      url: "${{ env.DEPLOYMENT_URL }}"
+    steps:
+      - name: Get project name from repository name.
+        run: echo "PROJECT_NAME=${GITHUB_REPOSITORY#*/}" | tr '[:upper:]' '[:lower:]' >> $GITHUB_ENV
+
+      - name: Lowercase repository and ref name
+        id: lowercase
+        run: |
+          echo "REPO_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          echo "REF_NAME=$(echo ${{ github.ref_name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Verify secrets
+        run: |
+          echo "DEPLOYMENT_SSH_HOSTNAME is set"
+          echo "DEPLOYMENT_SSH_PRIVATE_KEY is set"
+
+      - name: Setup SSH key and config
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOYMENT_SSH_PRIVATE_KEY }}" > ~/.ssh/private_key.pem
+          chmod 600 ~/.ssh/private_key.pem
+          echo -e "Host ${{ secrets.DEPLOYMENT_SSH_HOSTNAME }}\n\tStrictHostKeyChecking no\n\tIdentityFile ~/.ssh/private_key.pem\n" >> ~/.ssh/config
+          ssh-keyscan -H "${{ secrets.DEPLOYMENT_SSH_HOSTNAME }}" >> ~/.ssh/known_hosts
+        shell: bash
+
+      - name: Test SSH connection with verbose output
+        run: |
+          ssh -v -i ~/.ssh/private_key.pem ubuntu@${{ secrets.DEPLOYMENT_SSH_HOSTNAME }} echo "SSH connection successful"
+        shell: bash
+
+      - uses: serversideup/github-action-docker-swarm-deploy@v1
+        with:
+          deployment_ssh_private_key: "${{ secrets.DEPLOYMENT_SSH_PRIVATE_KEY }}"
+          remote_ssh_server_hostname: "${{ secrets.DEPLOYMENT_SSH_HOSTNAME }}"
+          registry: "ghcr.io"
+          registry-username: "${{ github.actor }}"
+          registry-token: "${{ secrets.GITHUB_TOKEN }}"
+          stack_name: "phantasma"
+        env:
+          TRAEFIK_HOST_RULE: "Host(`${{ env.DEPLOYMENT_URL_HOSTNAME }}`)"
+          DB_ROOT_PASSWORD: "${{ secrets.DB_ROOT_PASSWORD }}"
+          DB_NAME: "${{ secrets.DB_NAME }}"
+          DB_USERNAME: "${{ secrets.DB_USERNAME }}"
+          DB_PASSWORD: "${{ secrets.DB_PASSWORD }}"
+          DEPLOYMENT_IMAGE_PHP: "ghcr.io/${{ env.REPO_NAME }}:${{ env.REF_NAME }}"

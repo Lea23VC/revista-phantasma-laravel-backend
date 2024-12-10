@@ -12,7 +12,6 @@ final readonly class Slug
     /** @param  array{}  $args */
     public function __invoke(mixed $root, array $args, GraphQLContext $context)
     {
-        Log::info($root);
         if (isset($root['data']['url'])) {
 
 

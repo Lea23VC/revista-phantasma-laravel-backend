@@ -20,7 +20,11 @@ class EditorialMember extends Model implements HasMedia, Sortable
 
     use SortableTrait;
     use HasFactory;
-    protected $fillable = ['name', 'email', 'position', 'author_id'];
+    protected $fillable = ['name', 'email', 'position', 'author_id', 'receive_emails'];
+
+    protected $casts = [
+        'receive_emails' => 'boolean',
+    ];
 
     public function author(): BelongsTo
     {

@@ -18,6 +18,8 @@ jobs:
       # This step sets up Node.js environment.
       - name: Setup Node.js
         uses: actions/setup-node@v3
+        with:
+          node-version: 20
 
       # This step installs the Serverless Framework globally.
       - name: Install Serverless Framework
@@ -25,19 +27,24 @@ jobs:
 
       # This step installs the Serverless Framework globally.
       - name: Install Node modules
-        run: npm install
+        run: yarn install
 
       # This step sets up PHP environment with the specified version.
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: "8.3"
 
       # This step installs Composer dependencies with the specified options.
       - name: Install Composer dependencies
         uses: "ramsey/composer-install@v2"
         with:
           composer-options: "--prefer-dist --optimize-autoloader --no-dev"
+
+      - name: Create Service Account JSON
+        run: |
+          mkdir -p app/Credentials/Analytics
+          echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS }}' > app/Credentials/Analytics/service-account-credentials.json
 
       # This step deploys your application to AWS Lambda using the Serverless Framework.
       - name: Deploy to AWS Lambda

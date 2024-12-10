@@ -28,6 +28,7 @@ class PostsRelationManager extends RelationManager
                 DatePicker::make('publish_at')->native(false)->default(now()),
                 TinyEditor::make('content')->showMenuBar()->language('es')->toolbarSticky(true)->columnSpan('full')->fileAttachmentsDisk('s3')->fileAttachmentsVisibility('public')->fileAttachmentsDirectory('posts_content')->maxWidth("740px")->required(),
                 SpatieMediaLibraryFileUpload::make('featuredImage')
+                    ->downloadable()
                     ->label('Featured image')->disk('s3')
                     ->visibility('public')->responsiveImages()
                     ->directory('post_uploads')->image()->required(),
@@ -54,7 +55,8 @@ class PostsRelationManager extends RelationManager
             ])
             ->actions([
 
-                Action::make("Go to post")->url(fn (Post $record): string => env("FRONTEND_URL") . 'post/' . $record->slug, true),
+                Action::make("Go to post")->label(__("Go to post"))
+                    ->url(fn(Post $record): string => env("FRONTEND_URL") . 'post/' . $record->slug, true),
 
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),

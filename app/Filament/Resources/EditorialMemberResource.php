@@ -18,6 +18,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Tables\Columns\ToggleColumn;
 
 class EditorialMemberResource extends Resource
 {
@@ -39,24 +40,26 @@ class EditorialMemberResource extends Resource
         return $form
             ->schema([
                 //
-                TextInput::make('name')->label("Name")
+                TextInput::make('name')->label(__("Name"))
                     ->autofocus()
                     ->required(),
 
-                TextInput::make('position')->label("Position")
+                TextInput::make('position')->label(__("Position"))
                     ->required(),
 
                 TextInput::make('email')->label("Email")
                     ->required(),
 
                 SpatieMediaLibraryFileUpload::make('profilePic')
-                    ->label('Profile pic')->disk('s3')
+                    ->downloadable()
+                    ->label(__('Profile pic'))->disk('s3')
                     ->visibility('public')
                     ->directory('editorial_members_profile_pic')
                     ->collection('profile_pic')->responsiveImages()
                     ->image()->optimize('webp'),
 
-                Select::make('author_id')->label("Existing author?")
+
+                Select::make('author_id')->label(__("Existing author?"))
                     ->relationship(name: 'author', titleAttribute: 'name')
                     ->searchable()
                     ->preload(),
@@ -73,7 +76,9 @@ class EditorialMemberResource extends Resource
                 TextColumn::make('name')->label(__('Name'))->searchable()->sortable(),
                 TextColumn::make('email')->searchable(),
                 TextColumn::make('position')->label(__('Position'))->searchable(),
-                SpatieMediaLibraryImageColumn::make('profilePic')->label(__('Profile pic'))->collection('profile_pic')->square()->disk('s3')->visibility('public'),
+                ToggleColumn::make('receive_emails')->label(__('Receive emails?')),
+
+                // SpatieMediaLibraryImageColumn::make('profilePic')->label(__('Profile pic'))->collection('profile_pic')->square()->disk('s3')->visibility('public'),
 
             ])->defaultSort('order', 'asc')
             ->filters([

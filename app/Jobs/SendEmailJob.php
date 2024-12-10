@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\PhantasmaContact;
+use App\Models\EditorialMember;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -41,7 +42,16 @@ class SendEmailJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to(['revistaphantasma@gmail.com'])->send(
+
+        # Get all emails from EditorialMembers, only if they have receive_emails set to true
+        $emails = EditorialMember::where('receive_emails', true)->pluck('email')->toArray();
+
+
+        # Merge it with config('mail.from.address')
+        $emails[] = config('mail.from.address');
+
+
+        Mail::to($emails)->send(
             new PhantasmaContact(
                 $this->name,
                 $this->email,

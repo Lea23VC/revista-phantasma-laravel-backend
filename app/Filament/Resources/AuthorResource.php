@@ -44,6 +44,7 @@ class AuthorResource extends Resource
                 Forms\Components\TextInput::make('name')->label(__('Name'))->required(),
                 Forms\Components\TextInput::make('url')->label(__('URL')),
                 SpatieMediaLibraryFileUpload::make('profilePic')
+                    ->downloadable()
                     ->label('Profile pic')->disk('s3')
                     ->visibility('public')->responsiveImages()
                     ->directory('authors_profile_pic')->image(),
@@ -57,7 +58,7 @@ class AuthorResource extends Resource
                 //
                 TextColumn::make('name')->label(__('Name'))->searchable()->sortable(),
                 TextColumn::make('url')->searchable()->sortable(),
-                SpatieMediaLibraryImageColumn::make('profilePic')->label(__('Profile pic'))->square()->disk('s3')->visibility('public'),
+                // SpatieMediaLibraryImageColumn::make('profilePic')->label(__('Profile pic'))->square()->disk('s3')->visibility('public'),
 
             ])
             ->filters([

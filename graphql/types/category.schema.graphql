@@ -3,7 +3,10 @@ type Category {
     name: String!
     slug: String
     background: Media @method(name: "background")
-    posts: [Post] @morphToMany
+    posts: [Post]
+        @morphToMany
+        @orderBy(column: "publish_at", direction: DESC)
+        @where(key: "is_published", operator: "=", value: true)
 }
 
 union Categorizable = Post
